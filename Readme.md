@@ -97,7 +97,7 @@ The core gameplay interface featuring perfectly aligned letter boxes, an interac
 
 The terrifying jumpscare aftermath and "Executed" modal if the player fails to guess the word in time.
 
-*(Folder Assets Overview available at: `Screenshot/Screenshot 2026-09-04 at 5.04.49 AM.png`)*
+*(Folder Assets Overview available at: `Screenshots/Executed Modal.png`)*
 
 ---
 
