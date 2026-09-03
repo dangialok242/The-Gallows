@@ -95,6 +95,8 @@ The core gameplay interface featuring perfectly aligned letter boxes, an interac
   <img src="Screenshots/Lose Modal.png" width="780" alt="Lose Modal">
 </p>
 
+---
+
 ## 7️⃣ Executed modal - Chamber Unlocked
 
 <p align="center">
