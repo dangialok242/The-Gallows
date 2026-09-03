@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE GALLOWS</title>
+    <!-- 💀 SKULL FAVICON ADDED HERE 💀 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="blood-overlay"></div>
+    <canvas id="particles"></canvas>
+
+    <div id="jumpscare" class="hidden">
+        <div class="ghost-face">
+            <div class="ghost-eyes"><div class="eye left"></div><div class="eye right"></div></div>
+            <div class="ghost-mouth"></div>
+        </div>
+    </div>
+
+    <div id="scare-left" class="side-scare left">💀</div>
+    <div id="scare-right" class="side-scare right">👹</div>
+    <div id="scare-bottom" class="side-scare bottom">🧟</div>
+
+    <div id="unlock-modal" class="modal-overlay">
+        <div class="modal-content unlock-theme">
+            <div class="chain-break-icon">🩸 ➔ 💥 ➔ 🔓</div>
+            <h2 class="modal-title green glow-text">CHAMBER UNLOCKED!</h2>
+            <p id="unlock-desc">You survived! New nightmare awaits.</p>
+            <div class="points-reward" id="points-earned-badge">+0 POINTS</div>
+            <button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button>
+            <button id="unlock-to-map-btn" class="glow-btn outline" style="margin-top: 10px;">LEVEL MAP</button>
+        </div>
+    </div>
+
+    <!-- AUTH PAGE -->
+    <div id="auth-page" class="screen">
+        <div class="auth-container tagda-board flickering">
+            <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF BLOOD</h1>
+            <p style="color: #aaa; margin-bottom: 25px; font-style: italic;">Identify yourself , Executioner</p>
+            <label class="red-label" style="text-align: left;">Executioner Username</label>
+            <input type="text" id="auth-user" placeholder="Enter your dark name..." autocomplete="off">
+            <label class="red-label" style="text-align: left; margin-top: 15px;">Secret Passcode</label>
+            <input type="password" id="auth-pass" placeholder="Enter your death code...">
+            <p id="auth-msg" class="red glitch" style="margin-top: 15px; min-height: 20px; font-weight: bold;"></p>
+            <div class="auth-btns" style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
+                <button id="sign-in-btn" class="glow-btn danger">SIGN IN</button>
+                <button id="sign-up-btn" class="glow-btn outline">SIGN UP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LANDING PAGE -->
+    <div id="landing-page" class="screen">
+        <div class="landing-content flickering">
+            <h1 class="spooky-title">THE GALLOWS</h1>
+            <p class="spooky-subtitle">20 Chambers Infinite Terror</p>
+            <div class="landing-btns" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                <button id="enter-game-btn" class="glow-btn danger" style="font-size: 1.5rem; padding: 15px 30px;">ENTER THE NIGHTMARE</button>
+                <button id="logout-btn-landing" class="glow-btn outline small">LOGOUT (FLEE)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEVEL MAP -->
+    <div id="level-page" class="screen">
+        <div class="level-container">
+            <div class="level-header">
+                <h2 class="blood-text">CHAMBERS OF HELL</h2>
+                <div class="player-stats-bar">
+                    <span class="premium-plate">Executioner: <strong id="map-player-name" class="accent">Unknown</strong></span>
+                    <span class="premium-plate">Blood Points: <strong id="map-total-score" class="green">0</strong></span>
+                </div>
+            </div>
+            <div class="level-grid" id="level-grid"></div>
+            <div class="level-footer" style="justify-content: space-between;">
+                <button id="map-back-btn" class="glow-btn outline">BACK TO MENU</button>
+                <button id="logout-btn-map" class="glow-btn danger small">LOGOUT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAMEPLAY PAGE -->
+    <div id="game-page" class="screen">
+        <div class="game-container">
+            
+            <div class="panel settings-panel">
+                <div class="settings-top">
+                    <div class="level-badge" id="current-level-badge">CHAMBER 1 OF 20</div>
+                    <h2 class="blood-text" id="level-title-display" style="font-size: 2.2rem; margin-bottom: 5px;">CHAMBER 1</h2>
+
+                    <label class="red-label">NAME THE VICTIM</label>
+                    <input type="text" id="victim-name" placeholder="Who will hang today?..." style="border-color: #ff9900; margin-bottom: 10px;">
+
+                    <label class="red-label">TIME TO LIVE</label>
+                    <select id="timer-select" style="margin-bottom: 10px;">
+                        <option value="15" selected>15s - Instant Death</option>
+                        <option value="30">30s - Pure Panic</option>
+                        <option value="60">60s - High Fear</option>
+                        <option value="90">90s - Slow Torture</option>
+                    </select>
+
+                    <div class="difficulty-tag" id="level-diff-tag" style="margin-bottom: 15px;">Difficulty: EASY (+10 Pts)</div>
+
+                    <button id="start-execution-btn" class="glow-btn danger full-width" style="font-size: 1.1rem; animation: heartbeat 2s infinite;">💀 EMBRACE DOOM</button>
+
+                    <div class="controls-box">
+                        <button id="restart-level-btn" class="glow-btn danger small full-width hidden-btn">⟲ ACCEPT FATE (RETRY)</button>
+                        <button id="back-to-levels-btn" class="glow-btn outline small full-width" style="margin-top: 8px;">🗺️ FLEE TO MAP</button>
+                    </div>
+                </div>
+
+                <div class="stats-box premium-stats">
+                    <h3>🩸 SURVIVAL RECORD</h3>
+                    <div class="score-display">
+                        Total Points: <span id="current-score" class="score-neon">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel game-area tagda-board">
+                <div class="premium-top-bar">
+                    <div class="premium-plate victim-display">
+                        💀 Victim: <span id="display-player" class="accent">Waiting...</span>
+                    </div>
+                    <div class="premium-plate timer-display">
+                        ⏱️ <span id="timer-display" class="neon-timer">00:15</span>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <svg height="230" width="200" class="hangman-svg">
+                        <line id="part-0" x1="10" y1="220" x2="90" y2="220" class="draw-part" />
+                        <line id="part-1" x1="50" y1="220" x2="50" y2="20" class="draw-part" />
+                        <line id="part-2" x1="50" y1="20" x2="150" y2="20" class="draw-part" />
+                        <line id="part-3" x1="150" y1="20" x2="150" y2="50" class="draw-part rope" />
+                        <circle id="part-4" cx="150" cy="70" r="18" class="draw-part body-part" />
+                        <line id="part-5" x1="150" y1="88" x2="150" y2="145" class="draw-part body-part" />
+                        <line id="part-6" x1="150" y1="100" x2="120" y2="130" class="draw-part body-part" />
+                        <line id="part-7" x1="150" y1="100" x2="180" y2="130" class="draw-part body-part" />
+                        <line id="part-8" x1="150" y1="145" x2="120" y2="185" class="draw-part body-part" />
+                        <line id="part-9" x1="150" y1="145" x2="180" y2="185" class="draw-part body-part" />
+                    </svg>
+                </div>
+
+                <div id="word-display" class="word-boxes">
+                    <div class="scary-placeholder">AWAITING EXECUTION...</div>
+                </div>
+                <p class="hint-text">Clue: <span id="current-clue" class="accent">Will reveal upon start...</span></p>
+
+                <div id="keyboard" class="keyboard"></div>
+
+                <div class="action-buttons">
+                    <button id="hint-btn" class="glow-btn small">👁️ Reveal Letter (-2 Pts)</button>
+                    <button id="give-up-btn" class="glow-btn small danger">🏳 Surrender Soul</button>
+                </div>
+                <p class="mistake-counter">Bones Broken: <span id="mistake-count">0</span> / 10</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- WIN & LOSE MODALS -->
+    <div id="win-modal" class="modal-overlay"><div class="modal-content win-theme"><h2 class="modal-title green">SURVIVED!</h2><p>The victim lives... for now.</p><p class="final-word">Word: <span id="win-word"></span></p><button class="glow-btn modal-next-btn">PROCEED</button></div></div>
+    
+    <div id="lose-modal" class="modal-overlay">
+        <div class="modal-content lose-theme">
+            <h2 class="modal-title red">EXECUTED...</h2>
+            <p>The rope snapped the neck!</p>
+            <p class="final-word">The word was: <span id="lose-word"></span></p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button class="glow-btn danger" id="retry-level-btn">RETRY CHAMBER</button>
+                <button class="glow-btn outline" id="lose-to-map-btn">LEVEL MAP</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
