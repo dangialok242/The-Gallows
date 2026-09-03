@@ -42,7 +42,7 @@ The project demonstrates how modern web technologies can be used to simulate a c
 ## 1️⃣ Authentication — Pact of Blood
 
 <p align="center">
-  <img src="Screenshot/Screenshot%202026-09-04%20at%204.59.25%20AM.jpg" width="780" alt="Pact of Blood Authentication">
+  <img src="Screenshots/Pact of Blood Authentication.png" width="780" alt="Pact of Blood Authentication">
 </p>
 
 The authentication interface where players create their 'Executioner' persona or log in to their cursed accounts.
@@ -52,7 +52,7 @@ The authentication interface where players create their 'Executioner' persona or
 ## 2️⃣ Landing Page — Entrance to the Nightmare
 
 <p align="center">
-  <img src="Screenshot/Screenshot%202026-09-04%20at%205.01.19%20AM.jpg" width="780" alt="Landing Page">
+  <img src="Screenshots/Landing Page.png" width="780" alt="Landing Page">
 </p>
 
 The main entrance gateway offering options to enter the 20 chambers or flee (logout).
@@ -62,7 +62,7 @@ The main entrance gateway offering options to enter the 20 chambers or flee (log
 ## 3️⃣ Chambers of Hell — Level Select Map
 
 <p align="center">
-  <img src="Screenshot/Screenshot%202026-09-04%20at%205.01.38%20AM.jpg" width="780" alt="Chambers Map">
+  <img src="Screenshots/Chamber Map.png" width="780" alt="Chambers Map">
 </p>
 
 The interactive map showing your accumulated Blood Points, unlocked chambers, and locked skull tiles. Levels unlock incrementally based on your score.
@@ -72,7 +72,7 @@ The interactive map showing your accumulated Blood Points, unlocked chambers, an
 ## 4️⃣ Execution Setup — Awaiting Victim
 
 <p align="center">
-  <img src="Screenshot/Screenshot%202026-09-04%20at%205.01.58%20AM.jpg" width="780" alt="Execution Setup">
+  <img src="Screenshots/Execution Setup.png" width="780" alt="Execution Setup">
 </p>
 
 Before the timer starts, the Executioner must manually name the victim and select the time limit (15s to 90s). The game and timer will not start until doom is embraced.
@@ -82,7 +82,7 @@ Before the timer starts, the Executioner must manually name the victim and selec
 ## 5️⃣ Live Execution — Active Gameplay
 
 <p align="center">
-  <img src="Screenshot/Screenshot%202026-09-04%20at%205.03.04%20AM.jpg" width="780" alt="Active Gameplay">
+  <img src="Screenshots/Active Gameplay.png" width="780" alt="Active Gameplay">
 </p>
 
 The core gameplay interface featuring perfectly aligned letter boxes, an interactive QWERTY keyboard, glowing neon timer, and the SVG hangman drawing in real-time.
@@ -92,7 +92,7 @@ The core gameplay interface featuring perfectly aligned letter boxes, an interac
 ## 6️⃣ Execution Result — The Rope Snapped
 
 <p align="center">
-  <img src="Screenshot/Screenshot%202026-09-04%20at%205.03.23%20AM.jpg" width="780" alt="Lose Modal">
+  <img src="Screenshots/Lose Modal.png" width="780" alt="Lose Modal">
 </p>
 
 The terrifying jumpscare aftermath and "Executed" modal if the player fails to guess the word in time.
