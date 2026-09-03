@@ -95,9 +95,12 @@ The core gameplay interface featuring perfectly aligned letter boxes, an interac
   <img src="Screenshots/Lose Modal.png" width="780" alt="Lose Modal">
 </p>
 
-The terrifying jumpscare aftermath and "Executed" modal if the player fails to guess the word in time.
+## 7️⃣ Executed modal - Chamber Unlocked
 
-*(Folder Assets Overview available at: `Screenshots/Executed Modal.png`)*
+<p align="center">
+  <img src="Screenshots/Executed Modal.png" width="780" alt="Lose Modal">
+</p>
+
 
 ---
 
