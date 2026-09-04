@@ -32,7 +32,7 @@ The project demonstrates how modern web technologies can be used to simulate a c
 | ⌨️ **QWERTY Keyboard**        | A beautifully aligned, fully clickable on-screen QWERTY layout.       |
 | 🎵 **Synthesized Audio**      | 100% Code-generated horror sounds via Web Audio API (No MP3s used).   |
 | 👹 **Dynamic Jumpscares**     | Eerie entities peek from screen edges upon wrong guesses.             |
-| ⏱️ **Panic Timer Mode**       | A terrifying heartbeat sound plays during the final 5 seconds.        |
+| ⏱️ **Panic Timer Mode**       | A terrifying heartbeat sound plays during the final 10 seconds.        |
 | 💾 **Multi-User Storage**     | Stores users, points, and completed chambers locally in the browser.  |
 
 ---
