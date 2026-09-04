@@ -133,7 +133,7 @@ function renderLevelGrid() {
 }
 
 // ==========================================
-// 4. GAMEPLAY ENGINE (Dynamic Words & Last 5s)
+// 4. GAMEPLAY ENGINE (Dynamic Words & Last 10s)
 // ==========================================
 let currentWord = "", currentClue = "", guessedLetters = new Set();
 let mistakes = 0, hintsUsed = 0, timeRemaining = 15, timerInterval = null, isLevelStarted = false;
@@ -224,8 +224,8 @@ function updateTimer() {
     if (!isLevelStarted) return;
     timeRemaining--; timerDisplay.innerText = formatTime(timeRemaining);
     
-    // HEARTBEAT LAST 5 SECONDS
-    if (timeRemaining <= 5 && timeRemaining > 0) {
+    // HEARTBEAT LAST 10 SECONDS (Changed from 5 to 10)
+    if (timeRemaining <= 10 && timeRemaining > 0) {
         timerDisplay.classList.add('panic');
         sounds.heartbeat();
     }
