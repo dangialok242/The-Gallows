@@ -2,16 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- VIEWPORT STRICT LOCK (Prevents Mobile Shaking & Zooming) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>THE GALLOWS</title>
+    <title>THE GALLOWS: Death Pact</title>
     <!-- 💀 SKULL FAVICON 💀 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- NO EXIT BUTTON. ESCAPE IS IMPOSSIBLE MANUALLY. -->
-
     <div id="blood-overlay"></div>
     <canvas id="particles"></canvas>
 
@@ -53,14 +50,17 @@
     <div id="scare-right" class="side-scare right">👹</div>
     <div id="scare-bottom" class="side-scare bottom">🧟</div>
 
+    <!-- UNLOCK MODAL -->
     <div id="unlock-modal" class="modal-overlay">
         <div class="modal-content unlock-theme">
             <div class="chain-break-icon">🩸 ➔ 💥 ➔ 🔓</div>
             <h2 class="modal-title green glow-text">CHAMBER UNLOCKED!</h2>
             <p id="unlock-desc">You survived! New nightmare awaits.</p>
             <div class="points-reward" id="points-earned-badge">+0 POINTS</div>
-            <button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button>
-            <button id="unlock-to-map-btn" class="glow-btn outline" style="margin-top: 10px;">LEVEL MAP</button>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button>
+                <button id="unlock-to-map-btn" class="glow-btn outline">LEVEL MAP</button>
+            </div>
         </div>
     </div>
 
@@ -112,7 +112,7 @@
             </div>
             <div class="level-grid" id="level-grid"></div>
             <div class="level-footer" style="justify-content: space-between;">
-                <button id="map-back-btn" class="glow-btn outline">BACK TO MENU</button>
+                <button id="map-back-btn" class="glow-btn outline small">BACK TO MENU</button>
                 <button id="logout-btn-map" class="glow-btn danger small">LOGOUT</button>
             </div>
         </div>
@@ -125,10 +125,10 @@
             <div class="panel settings-panel">
                 <div class="settings-top">
                     <div class="level-badge" id="current-level-badge">CHAMBER 1 OF 20</div>
-                    <h2 class="blood-text" id="level-title-display" style="font-size: 2.2rem; margin-bottom: 5px;">CHAMBER 1</h2>
+                    <h2 class="blood-text" id="level-title-display" style="font-size: 2rem; margin-bottom: 5px;">CHAMBER 1</h2>
 
                     <label class="red-label">NAME THE VICTIM</label>
-                    <input type="text" id="victim-name" placeholder="Who will hang today?..." style="border-color: #ff9900; margin-bottom: 10px;">
+                    <input type="text" id="victim-name" placeholder="Who will hang?..." style="border-color: #ff9900; margin-bottom: 10px;">
 
                     <label class="red-label">TIME TO LIVE</label>
                     <select id="timer-select" style="margin-bottom: 10px;">
@@ -144,7 +144,7 @@
 
                     <div class="controls-box">
                         <button id="restart-level-btn" class="glow-btn danger small full-width hidden-btn">⟲ ACCEPT FATE (RETRY)</button>
-                        <button id="back-to-levels-btn" class="glow-btn outline small full-width" style="margin-top: 8px;">🗺️ FLEE TO MAP</button>
+                        <button id="back-to-levels-btn" class="glow-btn outline small full-width" style="margin-top: 5px;">🗺️ FLEE TO MAP</button>
                     </div>
                 </div>
 
@@ -162,9 +162,9 @@
                 </div>
 
                 <div class="canvas-container">
-                    <svg height="210" width="200" class="hangman-svg">
-                        <line id="part-0" x1="10" y1="200" x2="90" y2="200" class="draw-part" />
-                        <line id="part-1" x1="50" y1="200" x2="50" y2="10" class="draw-part" />
+                    <svg height="200" width="200" class="hangman-svg">
+                        <line id="part-0" x1="10" y1="190" x2="90" y2="190" class="draw-part" />
+                        <line id="part-1" x1="50" y1="190" x2="50" y2="10" class="draw-part" />
                         <line id="part-2" x1="50" y1="10" x2="150" y2="10" class="draw-part" />
                         <line id="part-3" x1="150" y1="10" x2="150" y2="40" class="draw-part rope" />
                         <circle id="part-4" cx="150" cy="55" r="15" class="draw-part body-part" />
@@ -186,18 +186,29 @@
                 <div id="keyboard" class="keyboard"></div>
 
                 <div class="action-buttons">
-                    <button id="extra-clue-btn" class="glow-btn small">📜 Extra Clue (-3 Pts)</button>
-                    <button id="hint-btn" class="glow-btn small">👁️ Reveal Letter (-2 Pts)</button>
+                    <button id="extra-clue-btn" class="glow-btn small">📜 Clue (-3 Pts)</button>
+                    <button id="hint-btn" class="glow-btn small">👁️ Reveal (-2 Pts)</button>
                     <button id="give-up-btn" class="glow-btn small danger">🏳 Surrender</button>
                 </div>
-                <p class="mistake-counter">Bones Broken: <span id="mistake-count">0</span> / 10</p>
+                <p class="mistake-counter" style="margin-top: 5px;">Bones Broken: <span id="mistake-count">0</span> / 10</p>
             </div>
         </div>
     </div>
 
-    <!-- MODALS -->
-    <div id="win-modal" class="modal-overlay"><div class="modal-content win-theme"><h2 class="modal-title green">SURVIVED!</h2><p>The victim lives... for now.</p><p class="final-word">Word: <span id="win-word"></span></p><button class="glow-btn modal-next-btn">PROCEED</button></div></div>
+    <!-- WIN MODAL -->
+    <div id="win-modal" class="modal-overlay">
+        <div class="modal-content win-theme">
+            <h2 class="modal-title green">SURVIVED!</h2>
+            <p>The victim lives... for now.</p>
+            <p class="final-word">Word: <span id="win-word"></span></p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button class="glow-btn" id="win-next-btn">PROCEED TO NEXT</button>
+                <button class="glow-btn outline" id="win-to-map-btn">LEVEL MAP</button>
+            </div>
+        </div>
+    </div>
     
+    <!-- LOSE MODAL -->
     <div id="lose-modal" class="modal-overlay">
         <div class="modal-content lose-theme">
             <h2 class="modal-title red blood-drop-title">EXECUTED...</h2>
@@ -221,6 +232,7 @@
             <p class="final-word" style="margin-top: 5px;">The secret word was: <span id="lose-word" class="accent"></span></p>
             <div style="display: flex; gap: 12px; justify-content: center; margin-top: 15px;">
                 <button class="glow-btn danger" id="retry-level-btn">RETRY CHAMBER</button>
+                <button class="glow-btn outline" id="lose-to-map-btn">LEVEL MAP</button>
             </div>
         </div>
     </div>

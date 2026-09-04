@@ -4,28 +4,24 @@
 function goFullscreen() {
     try {
         if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(err => console.log(err));
+            document.documentElement.requestFullscreen().catch(e => {});
         }
     } catch(e) {}
 }
 
-// TRAP TRIGGERS ONLY WHEN GAME IS CURRENTLY BEING PLAYED (Mid-game)
 document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && isLevelStarted) {
         document.getElementById('coward-overlay').classList.remove('hidden');
     }
 });
 
-// SAFE EVENT BINDER
-function addClick(id, handler) {
+// Bug-Free Event Binder (Uses direct onclick assignment)
+function bindClick(id, handler) {
     const el = document.getElementById(id);
-    if (el) {
-        el.removeEventListener('click', handler); // Prevents duplicates
-        el.addEventListener('click', handler);
-    }
+    if (el) el.onclick = handler;
 }
 
-addClick('return-to-hell-btn', () => {
+bindClick('return-to-hell-btn', () => {
     goFullscreen();
     document.getElementById('coward-overlay').classList.add('hidden');
 });
@@ -42,45 +38,45 @@ function showScaryToast(msg) {
 }
 
 // ==========================================
-// 2. DYNAMIC WORD ENGINE (100 Real-Life Horror Words)
+// 2. DICTIONARY (EASY 3-WORD CLUES)
 // ==========================================
 const wordsPool = {
     Short: [
-        { word: "BONE", clue: "Skeleton remains", clue2: "White and rigid." }, 
-        { word: "WOLF", clue: "Howls in the dark", clue2: "Full moon predator." }, 
-        { word: "TOMB", clue: "Stone resting place", clue2: "Found in a graveyard." },
-        { word: "FEAR", clue: "Terror in mind", clue2: "Makes your heart race." }, 
-        { word: "GORE", clue: "Bloody scene", clue2: "A lot of spilled blood." }, 
-        { word: "DARK", clue: "No light", clue2: "When the sun goes down." },
-        { word: "EVIL", clue: "Opposite of good", clue2: "Sinister and wicked." }, 
-        { word: "PREY", clue: "Hunted one", clue2: "The victim of a hunt." }, 
-        { word: "BATS", clue: "Night flyers", clue2: "Hang upside down in caves." }
+        { word: "BONE", clue: "White, Skeleton, Dog", clue2: "Hard calcium." }, 
+        { word: "WOLF", clue: "Animal, Howl, Moon", clue2: "Pack predator." }, 
+        { word: "DARK", clue: "No light, Black", clue2: "Night time." },
+        { word: "FEAR", clue: "Scared, Panic, Run", clue2: "Heart racing." }, 
+        { word: "ROPE", clue: "Tie, Hang, Knot", clue2: "Swing, Tying." }, 
+        { word: "FIRE", clue: "Burn, Hot, Flame", clue2: "Red, Smoke." },
+        { word: "PAIN", clue: "Hurt, Cry, Ouch", clue2: "Suffer, Ache." }, 
+        { word: "DEAD", clue: "No life, Cold", clue2: "End, Corpse." }, 
+        { word: "HIDE", clue: "Seek, Secret, Unseen", clue2: "Cover, Safe." }
     ],
     Medium: [
-        { word: "SHADOW", clue: "Lurks in dark", clue2: "Dark shape behind you." }, 
-        { word: "COFFIN", clue: "Six feet under box", clue2: "Vampire's bed." }, 
-        { word: "SCREAM", clue: "Sound of agony", clue2: "Vocal reaction to terror." },
-        { word: "ZOMBIE", clue: "Walking dead", clue2: "Craves human brains." }, 
-        { word: "CORPSE", clue: "Lifeless body", clue2: "No pulse, no breath." }, 
-        { word: "CURSED", clue: "Under dark spell", clue2: "Doomed by magic." },
-        { word: "DEMONS", clue: "Entities from hell", clue2: "Summoned from the underworld." }, 
-        { word: "RITUAL", clue: "Blood ceremony", clue2: "Chanting in a circle." }
+        { word: "GHOST", clue: "White, Spirit, Boo", clue2: "Float, Haunt." }, 
+        { word: "BLOOD", clue: "Red, Veins, Cut", clue2: "Drop, Bleed." }, 
+        { word: "KNIFE", clue: "Sharp, Cut, Metal", clue2: "Kitchen, Stab." },
+        { word: "GRAVE", clue: "Hole, Dead, Dirt", clue2: "Stone, Buried." }, 
+        { word: "SNAKE", clue: "Hiss, Bite, Poison", clue2: "Slither, Animal." }, 
+        { word: "DEVIL", clue: "Evil, Hell, Horns", clue2: "Red, Fire." },
+        { word: "SKULL", clue: "Head, Bone, Face", clue2: "Empty, White." }, 
+        { word: "WITCH", clue: "Broom, Magic, Hat", clue2: "Spell, Cackle." }
     ],
     Long: [
-        { word: "NOSFERATU", clue: "Ancient bloodsucker", clue2: "Classic bald vampire." }, 
-        { word: "EXECUTION", clue: "Swift cut to head", clue2: "The final punishment." },
-        { word: "NIGHTMARE", clue: "Dream you can't wake from", clue2: "Waking up in a cold sweat." }, 
-        { word: "CEMETERY", clue: "Graveyard full of tombstones", clue2: "Filled with dead bodies." },
-        { word: "SACRIFICE", clue: "Offering to dark gods", clue2: "Blood offered to the gods." }, 
-        { word: "BLOODSHED", clue: "Massacre & violence", clue2: "Carnage and slaughter." }
+        { word: "VAMPIRE", clue: "Bite, Neck, Blood", clue2: "Bat, Dracula." }, 
+        { word: "MONSTER", clue: "Scary, Beast, Bed", clue2: "Creature, Hide." },
+        { word: "ZOMBIE", clue: "Walk, Dead, Brains", clue2: "Infected, Bite." }, 
+        { word: "POISON", clue: "Drink, Toxic, Sick", clue2: "Venom, Vial." },
+        { word: "COFFIN", clue: "Box, Dead, Wood", clue2: "Vampire, Rest." }, 
+        { word: "MURDER", clue: "Kill, Crime, Police", clue2: "Weapon, Dead." }
     ],
     Extreme: [
-        { word: "RESURRECTION", clue: "Rising from dead", clue2: "Coming back to life." }, 
-        { word: "CLAUSTROPHOBIA", clue: "Fear of trapped darkness", clue2: "Panic in small spaces." },
-        { word: "NECROMANCER", clue: "Raiser of corpses", clue2: "Dark magic user." }, 
-        { word: "EXCOMMUNICATION", clue: "Cast to damnation", clue2: "Banished from the church." },
-        { word: "SCHIZOPHRENIA", clue: "Mind fracturing", clue2: "Hearing voices." }, 
-        { word: "ASPHYXIATION", clue: "Suffocating to death", clue2: "Choking on lack of air." }
+        { word: "CEMETERY", clue: "Graves, Dead, Yard", clue2: "Tombstones, Spooky." }, 
+        { word: "SKELETON", clue: "Bones, Skull, Body", clue2: "Walking, Dead." },
+        { word: "NIGHTMARE", clue: "Bad dream, Scary", clue2: "Sleep, Wake." }, 
+        { word: "SACRIFICE", clue: "Offer, Kill, God", clue2: "Altar, Blood." },
+        { word: "TORTURE", clue: "Pain, Slow, Hurt", clue2: "Suffer, Tool." }, 
+        { word: "CHAINSAW", clue: "Machine, Cut, Loud", clue2: "Blade, Motor." }
     ]
 };
 
@@ -113,9 +109,7 @@ function playTone(freq, type, duration, vol=0.1, freqEnd = null) {
 const wrongSounds = [
     () => playTone(150, 'sine', 0.5, 0.4, 40), () => playTone(800, 'sawtooth', 0.3, 0.2, 1200),
     () => { playTone(600, 'square', 0.4, 0.1); playTone(630, 'square', 0.4, 0.1); }, () => playTone(60, 'sawtooth', 0.6, 0.4),
-    () => playTone(300, 'triangle', 0.7, 0.3, 100), () => playTone(1200, 'square', 0.1, 0.2, 200),
-    () => playTone(1500, 'sine', 0.8, 0.1, 1400), () => playTone(250, 'square', 0.2, 0.3, 50),
-    () => { playTone(100, 'sawtooth', 0.2, 0.3); setTimeout(() => playTone(500, 'square', 0.1, 0.1), 100); }, () => playTone(80, 'triangle', 0.9, 0.5)
+    () => playTone(300, 'triangle', 0.7, 0.3, 100), () => playTone(1200, 'square', 0.1, 0.2, 200)
 ];
 
 const sounds = {
@@ -130,14 +124,11 @@ const sounds = {
         const osc1 = audioCtx.createOscillator(); osc1.type = 'sawtooth';
         osc1.frequency.setValueAtTime(150, audioCtx.currentTime); osc1.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 1.5);
         osc1.connect(gain); osc1.start(); osc1.stop(audioCtx.currentTime + 1.5);
-        const osc2 = audioCtx.createOscillator(); osc2.type = 'square';
-        osc2.frequency.setValueAtTime(2000, audioCtx.currentTime); osc2.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 1.5);
-        osc2.connect(gain); osc2.start(); osc2.stop(audioCtx.currentTime + 1.5);
     }
 };
 
 // ==========================================
-// 4. AUTHENTICATION & MULTI-USER STORAGE
+// 4. AUTH & MULTI-USER STORAGE
 // ==========================================
 let authenticatedUser = localStorage.getItem('currentUser') || "";
 let totalPoints = 0; let completedLevels = []; let currentLevelIndex = 0; 
@@ -151,7 +142,7 @@ window.addEventListener('DOMContentLoaded', () => {
     else { showScreen('auth'); } 
 });
 
-addClick('sign-up-btn', () => {
+bindClick('sign-up-btn', () => {
     initAudio();
     const user = document.getElementById('auth-user').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
     if(!user || !pass) { showScaryToast("USERNAME AND PASSCODE REQUIRED!"); return; }
@@ -160,7 +151,7 @@ addClick('sign-up-btn', () => {
     document.getElementById('auth-msg').style.color = "var(--success)"; document.getElementById('auth-msg').innerText = "Pact Sealed! Now click SIGN IN.";
 });
 
-addClick('sign-in-btn', () => {
+bindClick('sign-in-btn', () => {
     initAudio();
     const user = document.getElementById('auth-user').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
     const msg = document.getElementById('auth-msg'); msg.style.color = "var(--danger)";
@@ -189,45 +180,57 @@ function saveProgress() {
 function updateStatsUI() { document.getElementById('map-total-score').innerText = totalPoints; document.getElementById('current-score').innerText = totalPoints; }
 
 function logoutUser() { authenticatedUser = ""; localStorage.removeItem('currentUser'); document.getElementById('auth-user').value = ""; document.getElementById('auth-pass').value = ""; showScreen('auth'); }
-addClick('logout-btn-landing', logoutUser);
-addClick('logout-btn-map', logoutUser);
+bindClick('logout-btn-landing', logoutUser);
+bindClick('logout-btn-map', logoutUser);
 
-// ==========================================
-// 5. GAMEPLAY ENGINE & SAFE BUTTON LOGIC
-// ==========================================
-let currentWord = "", currentClue = "", currentClue2 = "", guessedLetters = new Set();
-let mistakes = 0, hintsUsed = 0, extraClueUsed = false;
-let timeRemaining = 15, timerInterval = null, isLevelStarted = false;
-let gamePlayedInSession = true; // Initially true, becomes false on enter chamber
-
-const timerSelect = document.getElementById('timer-select'); const timerDisplay = document.getElementById('timer-display');
-const wordDisplay = document.getElementById('word-display'); const keyboardDiv = document.getElementById('keyboard');
-const startExecutionBtn = document.getElementById('start-execution-btn'); const restartLevelBtn = document.getElementById('restart-level-btn');
-const backToLevelsBtn = document.getElementById('back-to-levels-btn');
-const hintBtn = document.getElementById('hint-btn'); const victimInput = document.getElementById('victim-name');
-const extraClueBtn = document.getElementById('extra-clue-btn'); 
-const extraClueContainer = document.getElementById('extra-clue-container'); const extraClueText = document.getElementById('extra-clue');
-
-// Start from Landing
-addClick('enter-game-btn', () => { 
+// AUTO FULLSCREEN ON ENTRY
+bindClick('enter-game-btn', () => { 
     initAudio(); 
     goFullscreen(); 
     renderLevelGrid(); 
     showScreen('levelSelect'); 
 });
+bindClick('map-back-btn', () => showScreen('landing'));
 
-addClick('map-back-btn', () => showScreen('landing'));
+// ==========================================
+// 5. GAMEPLAY ENGINE & BUG FREE BUTTONS
+// ==========================================
+let currentWord = "", currentClue = "", currentClue2 = "", guessedLetters = new Set();
+let mistakes = 0, hintsUsed = 0, extraClueUsed = false;
+let timeRemaining = 15, timerInterval = null, isLevelStarted = false;
 
-// Global Modals
-addClick('unlock-to-map-btn', () => { document.getElementById('unlock-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
-addClick('lose-to-map-btn', () => { document.getElementById('lose-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
+const timerSelect = document.getElementById('timer-select'); const timerDisplay = document.getElementById('timer-display');
+const wordDisplay = document.getElementById('word-display'); const keyboardDiv = document.getElementById('keyboard');
+const startExecutionBtn = document.getElementById('start-execution-btn'); const restartLevelBtn = document.getElementById('restart-level-btn');
+const backToLevelsBtn = document.getElementById('back-to-levels-btn'); 
+const hintBtn = document.getElementById('hint-btn'); const victimInput = document.getElementById('victim-name');
+const extraClueBtn = document.getElementById('extra-clue-btn'); 
+const extraClueContainer = document.getElementById('extra-clue-container'); const extraClueText = document.getElementById('extra-clue');
 
-addClick('retry-level-btn', () => { 
+// GLOBAL MODAL BUTTON BINDING
+bindClick('unlock-to-map-btn', () => { document.getElementById('unlock-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
+bindClick('lose-to-map-btn', () => { document.getElementById('lose-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
+bindClick('win-to-map-btn', () => { document.getElementById('win-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
+
+bindClick('retry-level-btn', () => { 
     document.getElementById('lose-modal').classList.remove('show'); 
     prepareLevel(currentLevelIndex); 
 });
 
-addClick('back-to-levels-btn', () => { 
+bindClick('win-next-btn', () => { 
+    document.getElementById('win-modal').classList.remove('show'); 
+    let nextLvl = levelsData[currentLevelIndex + 1]; 
+    if (nextLvl && totalPoints >= nextLvl.unlockPts) prepareLevel(currentLevelIndex + 1); 
+    else { renderLevelGrid(); showScreen('levelSelect'); } 
+});
+
+bindClick('next-level-btn', () => { 
+    document.getElementById('unlock-modal').classList.remove('show'); 
+    if (currentLevelIndex + 1 < levelsData.length) prepareLevel(currentLevelIndex + 1); 
+    else { renderLevelGrid(); showScreen('levelSelect'); } 
+});
+
+bindClick('back-to-levels-btn', () => { 
     clearInterval(timerInterval); 
     renderLevelGrid(); 
     showScreen('levelSelect'); 
@@ -238,8 +241,8 @@ function renderLevelGrid() {
     levelsData.forEach((lvl, idx) => {
         const card = document.createElement('div'); card.classList.add('level-card');
         const isUnlocked = totalPoints >= lvl.unlockPts; const isCompleted = completedLevels.includes(lvl.id);
-        if (isCompleted) { card.classList.add('completed'); card.innerHTML = `<div class="card-icon">🗡️</div><div class="card-num">CHAMBER ${lvl.id}</div><div class="card-diff">SURVIVED (+${lvl.pts})</div>`; card.addEventListener('click', () => prepareLevel(idx)); } 
-        else if (isUnlocked) { card.classList.add('unlocked'); card.innerHTML = `<div class="card-icon">⚡</div><div class="card-num">CHAMBER ${lvl.id}</div><div class="card-diff">${lvl.diff} (Needs ${lvl.unlockPts} Pts)</div>`; card.addEventListener('click', () => prepareLevel(idx)); } 
+        if (isCompleted) { card.classList.add('completed'); card.innerHTML = `<div class="card-icon">🗡️</div><div class="card-num">CHAMBER ${lvl.id}</div><div class="card-diff">SURVIVED (+${lvl.pts})</div>`; card.onclick = () => prepareLevel(idx); } 
+        else if (isUnlocked) { card.classList.add('unlocked'); card.innerHTML = `<div class="card-icon">⚡</div><div class="card-num">CHAMBER ${lvl.id}</div><div class="card-diff">${lvl.diff} (Needs ${lvl.unlockPts} Pts)</div>`; card.onclick = () => prepareLevel(idx); } 
         else { card.classList.add('locked'); card.innerHTML = `<div class="card-icon">💀</div><div class="card-num">CHAMBER ${lvl.id}</div><div class="card-diff">LOCKED (Needs ${lvl.unlockPts} Pts)</div>`; }
         grid.appendChild(card);
     });
@@ -261,7 +264,7 @@ function resetBoardState() {
     
     startExecutionBtn.classList.remove('hidden-btn'); 
     restartLevelBtn.classList.add('hidden-btn');
-    backToLevelsBtn.classList.remove('hidden-btn'); // Flee button normal before starting
+    backToLevelsBtn.classList.remove('hidden-btn'); 
 
     hintBtn.innerText = "👁️ Reveal Letter (-2 Pts)"; hintBtn.classList.remove('disabled');
     extraClueBtn.innerText = "📜 Extra Clue (-3 Pts)"; extraClueBtn.classList.remove('disabled');
@@ -287,7 +290,7 @@ function buildKeyboard(isDisabled) {
         row.forEach(char => {
             let btn = document.createElement('button'); btn.innerText = char; btn.id = `key-${char}`; btn.classList.add('key');
             if(isDisabled) btn.classList.add('disabled');
-            btn.addEventListener('click', () => handleGuess(char)); rowDiv.appendChild(btn);
+            btn.onclick = () => handleGuess(char); rowDiv.appendChild(btn);
         });
         keyboardDiv.appendChild(rowDiv);
     });
@@ -295,8 +298,8 @@ function buildKeyboard(isDisabled) {
 
 timerSelect.addEventListener('change', () => { if (!isLevelStarted) timerDisplay.innerText = formatTime(parseInt(timerSelect.value)); });
 
-// START EXECUTION LOGIC (NO BUG)
-addClick('start-execution-btn', () => {
+// START EXECUTION LOGIC
+bindClick('start-execution-btn', () => {
     initAudio();
     const vName = victimInput.value.trim();
     if(vName === "") { 
@@ -318,8 +321,7 @@ addClick('start-execution-btn', () => {
     }
 
     const randomWordObj = available[Math.floor(Math.random() * available.length)];
-    if (!randomWordObj) { currentWord = "DEATH"; currentClue = "The end."; currentClue2 = "Final."; }
-    else { currentWord = randomWordObj.word.toUpperCase(); currentClue = randomWordObj.clue; currentClue2 = randomWordObj.clue2; }
+    currentWord = randomWordObj.word.toUpperCase(); currentClue = randomWordObj.clue; currentClue2 = randomWordObj.clue2;
     
     globalUsedWords.push(currentWord); saveProgress(); 
 
@@ -328,7 +330,7 @@ addClick('start-execution-btn', () => {
     
     startExecutionBtn.classList.add('hidden-btn'); 
     restartLevelBtn.classList.remove('hidden-btn');
-    backToLevelsBtn.classList.add('hidden-btn'); // LOCK IN: No Escape!
+    backToLevelsBtn.classList.add('hidden-btn'); // NO ESCAPE
 
     isLevelStarted = true; buildKeyboard(false); 
     
@@ -342,13 +344,11 @@ addClick('start-execution-btn', () => {
     timerInterval = setInterval(updateTimer, 1000);
 });
 
-// CONTROL KEY SHORTCUT SYSTEM
+bindClick('restart-level-btn', () => prepareLevel(currentLevelIndex));
+
+// SHORTCUTS SYSTEM (CTRL)
 window.addEventListener('keydown', (e) => { 
-    // SHOW SHORTCUTS ON CTRL PRESS
-    if (e.key === "Control" || e.ctrlKey) { 
-        document.getElementById('shortcuts-overlay').classList.remove('hidden'); 
-    }
-    
+    if (e.key === "Control" || e.ctrlKey) { document.getElementById('shortcuts-overlay').classList.remove('hidden'); }
     if (document.activeElement === victimInput && e.key !== "Enter") return;
 
     if (!isLevelStarted) {
@@ -367,10 +367,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
-    // HIDE SHORTCUTS ON CTRL RELEASE
-    if (e.key === "Control" || !e.ctrlKey) { 
-        document.getElementById('shortcuts-overlay').classList.add('hidden'); 
-    }
+    if (e.key === "Control" || !e.ctrlKey) { document.getElementById('shortcuts-overlay').classList.add('hidden'); }
 });
 
 function updateTimer() {
@@ -414,7 +411,7 @@ function handleGuess(char) {
 
 function handleLevelWin() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
-    backToLevelsBtn.classList.remove('hidden-btn'); // UNLOCK FLEE BUTTON
+    backToLevelsBtn.classList.remove('hidden-btn'); 
 
     const lvl = levelsData[currentLevelIndex];
     totalPoints += lvl.pts; if (!completedLevels.includes(lvl.id)) completedLevels.push(lvl.id); saveProgress();
@@ -430,6 +427,7 @@ function handleLevelWin() {
 
 function triggerDeath() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
+    backToLevelsBtn.classList.remove('hidden-btn'); 
     sounds.extremeJumpscare(); 
     
     const jumpscare = document.getElementById('jumpscare'); jumpscare.classList.remove('hidden');
@@ -441,7 +439,7 @@ function triggerDeath() {
     }, 1400);
 }
 
-addClick('hint-btn', () => {
+bindClick('hint-btn', () => {
     if (!isLevelStarted) return; if (hintsUsed >= 1) { showScaryToast("⚠️ REVEAL LETTER CHANCE ALREADY USED!"); return; }
     let unGuessed = currentWord.split('').filter(c => !guessedLetters.has(c));
     if (unGuessed.length > 0) { 
@@ -451,14 +449,14 @@ addClick('hint-btn', () => {
     }
 });
 
-addClick('extra-clue-btn', () => {
+bindClick('extra-clue-btn', () => {
     if (!isLevelStarted) return; if (extraClueUsed) { showScaryToast("⚠️ EXTRA CLUE ALREADY USED!"); return; }
     totalPoints = Math.max(0, totalPoints - 3); saveProgress(); extraClueUsed = true;
     extraClueBtn.innerText = "📜 Clue Used"; extraClueBtn.classList.add('disabled');
     extraClueText.innerText = currentClue2; extraClueContainer.classList.remove('hidden-btn');
 });
 
-addClick('give-up-btn', () => { if (isLevelStarted) triggerDeath(); });
+bindClick('give-up-btn', () => { if (isLevelStarted) triggerDeath(); });
 
 // ==========================================
 // 6. BACKGROUND PARTICLES 
