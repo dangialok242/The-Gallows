@@ -41,14 +41,14 @@ input, select { background: rgba(0,0,0,0.8); border: 1px solid #ff2a2a; color: w
 input::placeholder { color: #552222; font-style: italic; font-weight: bold;}
 input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 
-/* Left Panel Realignment */
+/* Left Panel Alignment */
 .settings-panel { display: flex; flex-direction: column; justify-content: space-between; height: 100%; background: #0f0505; border: 1px solid #300 !important; }
 .settings-top { display: flex; flex-direction: column; }
 .controls-box { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
 .level-badge { background: #330000; color: #ff5555; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: 900; letter-spacing: 1px; display: inline-block; margin-bottom: 5px;}
 .difficulty-tag { font-size: 0.9rem; font-weight: bold; color: var(--text); }
 
-/* Premium Stats Footer in Left Panel */
+/* Premium Stats Footer */
 .premium-stats {
     margin-top: auto;
     background: linear-gradient(180deg, rgba(20,0,0,0.8) 0%, rgba(50,0,0,0.9) 100%);
@@ -127,12 +127,76 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 /* MODALS */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; visibility: hidden; transition: 0.3s; }
 .modal-overlay.show { opacity: 1; visibility: visible; }
-.modal-content { background: #0d0202; padding: 35px 45px; border-radius: 12px; text-align: center; border: 2px solid red; box-shadow: 0 0 50px red; transform: scale(0.8); transition: 0.3s; }
+.modal-content { background: #0d0202; padding: 30px 40px; border-radius: 12px; text-align: center; border: 2px solid red; box-shadow: 0 0 50px red; transform: scale(0.8); transition: 0.3s; min-width: 380px; }
 .modal-overlay.show .modal-content { transform: scale(1); }
-.modal-title { font-size: 2.8rem; font-family: 'Creepster', cursive; letter-spacing: 4px; margin-bottom: 10px; }
-.final-word { font-size: 1.4rem; margin: 15px 0; font-weight: bold; letter-spacing: 2px; }
+.modal-title { font-size: 2.8rem; font-family: 'Creepster', cursive; letter-spacing: 4px; margin-bottom: 5px; }
+.final-word { font-size: 1.3rem; margin: 10px 0; font-weight: bold; letter-spacing: 1.5px; }
 .unlock-theme { border-color: var(--success); box-shadow: 0 0 60px rgba(0, 255, 102, 0.5); }
 .chain-break-icon { font-size: 3rem; margin-bottom: 10px; animation: bounce 1s infinite alternate; }
+
+/* 💀 MOVABLE REALISTIC HANGING MAN ANIMATIONS 💀 */
+.hanging-execution-scene {
+    position: relative;
+    width: 200px;
+    height: 240px;
+    margin: 5px auto 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.swinging-corpse-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Pendulum physical swing from gallows hook (x=100, y=14) */
+.corpse-pendulum {
+    transform-origin: 100px 14px;
+    animation: realisticBodySwing 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes realisticBodySwing {
+    0% { transform: rotate(-9deg); }
+    50% { transform: rotate(7deg); }
+    100% { transform: rotate(-9deg); }
+}
+
+/* Secondary inert sway for arms */
+.arm-left {
+    transform-origin: 86px 81px;
+    animation: armSwayLeft 3.2s ease-in-out infinite alternate;
+}
+.arm-right {
+    transform-origin: 114px 81px;
+    animation: armSwayRight 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes armSwayLeft {
+    0% { transform: rotate(-4deg); }
+    100% { transform: rotate(6deg); }
+}
+@keyframes armSwayRight {
+    0% { transform: rotate(-6deg); }
+    100% { transform: rotate(4deg); }
+}
+
+/* Ground shadow shifting with the body */
+.corpse-shadow {
+    width: 90px;
+    height: 14px;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, transparent 75%);
+    border-radius: 50%;
+    margin-top: -10px;
+    animation: shadowSway 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes shadowSway {
+    0% { transform: translateX(-16px) scale(0.9); opacity: 0.6; }
+    50% { transform: translateX(12px) scale(0.9); opacity: 0.6; }
+    100% { transform: translateX(-16px) scale(0.9); opacity: 0.6; }
+}
 
 /* Jumpscare */
 #jumpscare { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; display: flex; align-items: center; justify-content: center; animation: strobe 0.05s infinite; }
@@ -149,4 +213,5 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
     .level-grid { grid-template-columns: repeat(3, 1fr); }
     .key { padding: 8px 10px; font-size: 0.9rem; }
     .letter-box { width: 35px; height: 45px; font-size: 1.8rem; }
+    .hanging-execution-scene { height: 190px; }
 }

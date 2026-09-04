@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE GALLOWS</title>
-    <!-- 💀 SKULL FAVICON 💀 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -34,7 +33,6 @@
         </div>
     </div>
 
-    <!-- AUTH PAGE (With 'Designed by Dangi') -->
     <div id="auth-page" class="screen">
         <div class="auth-container tagda-board flickering">
             <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF BLOOD</h1>
@@ -53,14 +51,12 @@
                 <button id="sign-up-btn" class="glow-btn outline">SIGN UP</button>
             </div>
 
-            <!-- WATERMARK ADDED HERE -->
             <p style="margin-top: 30px; font-family: 'Creepster', cursive; color: #660000; font-size: 1.3rem; letter-spacing: 3px; text-shadow: 0 0 5px rgba(255,0,0,0.3);">
                 DESIGNED BY DANGI
             </p>
         </div>
     </div>
 
-    <!-- LANDING PAGE -->
     <div id="landing-page" class="screen">
         <div class="landing-content flickering">
             <h1 class="spooky-title">THE GALLOWS</h1>
@@ -72,7 +68,6 @@
         </div>
     </div>
 
-    <!-- LEVEL MAP -->
     <div id="level-page" class="screen">
         <div class="level-container">
             <div class="level-header">
@@ -90,11 +85,9 @@
         </div>
     </div>
 
-    <!-- GAMEPLAY PAGE -->
     <div id="game-page" class="screen">
         <div class="game-container">
             
-            <!-- ALIGNED & STYLED LEFT PANEL -->
             <div class="panel settings-panel">
                 <div class="settings-top">
                     <div class="level-badge" id="current-level-badge">CHAMBER 1 OF 20</div>
@@ -121,7 +114,6 @@
                     </div>
                 </div>
 
-                <!-- SURVIVAL RECORD -->
                 <div class="stats-box premium-stats">
                     <h3>🩸 SURVIVAL RECORD</h3>
                     <div class="score-display">
@@ -130,7 +122,6 @@
                 </div>
             </div>
 
-            <!-- RIGHT PANEL (GAME AREA) -->
             <div class="panel game-area tagda-board">
                 <div class="premium-top-bar">
                     <div class="premium-plate victim-display">
@@ -172,15 +163,65 @@
         </div>
     </div>
 
-    <!-- WIN & LOSE MODALS -->
-    <div id="win-modal" class="modal-overlay"><div class="modal-content win-theme"><h2 class="modal-title green">SURVIVED!</h2><p>The victim lives... for now.</p><p class="final-word">Word: <span id="win-word"></span></p><button class="glow-btn modal-next-btn">PROCEED</button></div></div>
+    <div id="win-modal" class="modal-overlay">
+        <div class="modal-content win-theme">
+            <h2 class="modal-title green">SURVIVED!</h2>
+            <p>The victim lives... for now.</p>
+            <p class="final-word">Word: <span id="win-word"></span></p>
+            <button class="glow-btn modal-next-btn">PROCEED</button>
+        </div>
+    </div>
     
     <div id="lose-modal" class="modal-overlay">
         <div class="modal-content lose-theme">
-            <h2 class="modal-title red">EXECUTED...</h2>
-            <p>The rope snapped the neck!</p>
-            <p class="final-word">The word was: <span id="lose-word"></span></p>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+            <h2 class="modal-title red blood-drop-title">EXECUTED...</h2>
+            
+            <div class="hanging-execution-scene">
+                <svg viewBox="0 0 200 240" class="swinging-corpse-svg">
+                    <rect x="20" y="2" width="160" height="12" fill="#2b1408" stroke="#120502" stroke-width="2" rx="2" />
+                    <circle cx="100" cy="14" r="5" fill="none" stroke="#888" stroke-width="3" />
+                    
+                    <g class="corpse-pendulum">
+                        <line x1="100" y1="16" x2="100" y2="60" stroke="#b08852" stroke-width="4.5" stroke-dasharray="4,1" />
+                        <ellipse cx="100" cy="62" rx="6" ry="7" fill="#6d491f" stroke="#3d260c" stroke-width="2" />
+
+                        <g class="dead-body">
+                            <g transform="translate(100, 64) rotate(16)">
+                                <ellipse cx="0" cy="14" rx="13" ry="16" fill="#889689" stroke="#364237" stroke-width="1.5" />
+                                <path d="M -12,6 Q 0,-5 12,3 Q 15,16 10,22 Q 0,18 -12,16 Z" fill="#181311" />
+                                <line x1="-7" y1="13" x2="-2" y2="17" stroke="#220505" stroke-width="2" />
+                                <line x1="-2" y1="13" x2="-7" y2="17" stroke="#220505" stroke-width="2" />
+                                <line x1="2" y1="13" x2="7" y2="17" stroke="#220505" stroke-width="2" />
+                                <line x1="7" y1="13" x2="2" y2="17" stroke="#220505" stroke-width="2" />
+                                <ellipse cx="1" cy="23" rx="4" ry="5" fill="#1a0000" />
+                                <path d="M 1,27 Q 2,34 0,38" stroke="#aa0000" stroke-width="2" fill="none" />
+                            </g>
+
+                            <path d="M 85,78 L 115,78 L 112,138 L 88,138 Z" fill="#23262d" stroke="#101217" stroke-width="1.8" />
+                            <path d="M 92,86 L 100,102 L 105,88 L 108,106" stroke="#660000" stroke-width="2.5" fill="none" />
+
+                            <g class="arm-left">
+                                <path d="M 86,81 Q 75,105 73,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" />
+                                <ellipse cx="72" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(8, 72, 136)" />
+                            </g>
+                            <g class="arm-right">
+                                <path d="M 114,81 Q 125,105 127,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" />
+                                <ellipse cx="128" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(-8, 128, 136)" />
+                            </g>
+
+                            <path d="M 91,138 L 89,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" />
+                            <path d="M 89,185 Q 88,196 86,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" />
+
+                            <path d="M 109,138 L 111,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" />
+                            <path d="M 111,185 Q 112,196 114,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="corpse-shadow"></div>
+            </div>
+
+            <p class="final-word" style="margin-top: 5px;">The secret word was: <span id="lose-word" class="accent"></span></p>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 15px;">
                 <button class="glow-btn danger" id="retry-level-btn">RETRY CHAMBER</button>
                 <button class="glow-btn outline" id="lose-to-map-btn">LEVEL MAP</button>
             </div>

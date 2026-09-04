@@ -224,7 +224,7 @@ function updateTimer() {
     if (!isLevelStarted) return;
     timeRemaining--; timerDisplay.innerText = formatTime(timeRemaining);
     
-    // HEARTBEAT LAST 10 SECONDS (Changed from 5 to 10)
+    // HEARTBEAT LAST 10 SECONDS
     if (timeRemaining <= 10 && timeRemaining > 0) {
         timerDisplay.classList.add('panic');
         sounds.heartbeat();
