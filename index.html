@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE GALLOWS</title>
-    <!-- 💀 SKULL FAVICON 💀 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -39,20 +38,15 @@
         <div class="auth-container tagda-board flickering">
             <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF BLOOD</h1>
             <p style="color: #aaa; margin-bottom: 25px; font-style: italic;">Identify yourself, Executioner...</p>
-            
             <label class="red-label" style="text-align: left;">Executioner Username</label>
             <input type="text" id="auth-user" placeholder="Enter your dark name..." autocomplete="off">
-            
             <label class="red-label" style="text-align: left; margin-top: 15px;">Secret Passcode</label>
             <input type="password" id="auth-pass" placeholder="Enter your death code...">
-            
             <p id="auth-msg" class="red glitch" style="margin-top: 15px; min-height: 20px; font-weight: bold;"></p>
-            
             <div class="auth-btns" style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
                 <button id="sign-in-btn" class="glow-btn danger">SIGN IN</button>
                 <button id="sign-up-btn" class="glow-btn outline">SIGN UP</button>
             </div>
-
             <p style="margin-top: 30px; font-family: 'Creepster', cursive; color: #660000; font-size: 1.3rem; letter-spacing: 3px; text-shadow: 0 0 5px rgba(255,0,0,0.3);">
                 DESIGNED BY DANGI
             </p>
@@ -155,11 +149,17 @@
                 <div id="word-display" class="word-boxes">
                     <div class="scary-placeholder">AWAITING EXECUTION...</div>
                 </div>
-                <p class="hint-text">Clue: <span id="current-clue" class="accent">Will reveal upon start...</span></p>
+                
+                <div style="text-align: center;">
+                    <p class="hint-text">Clue: <span id="current-clue" class="accent">Will reveal upon start...</span></p>
+                    <p class="hint-text hidden-btn" id="extra-clue-container" style="margin-top: 5px; color: #ff9900;">Extra Clue: <span id="extra-clue" class="accent"></span></p>
+                </div>
 
                 <div id="keyboard" class="keyboard"></div>
 
+                <!-- ADDED THE MISSING EXTRA CLUE BUTTON HERE -->
                 <div class="action-buttons">
+                    <button id="extra-clue-btn" class="glow-btn small">📜 Extra Clue (-3 Pts)</button>
                     <button id="hint-btn" class="glow-btn small">👁️ Reveal Letter (-2 Pts)</button>
                     <button id="give-up-btn" class="glow-btn small danger">🏳 Surrender Soul</button>
                 </div>

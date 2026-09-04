@@ -1,126 +1,52 @@
 // ==========================================
-// 1. DYNAMIC REAL-LIFE HORROR DICTIONARY (100 WORDS)
+// 1. DYNAMIC WORD ENGINE (With 2 Clues per word)
 // ==========================================
 const wordsPool = {
-    Easy: [
-        { word: "KNIFE", clue: "Cuts vegetables and throats too." },
-        { word: "ROPE", clue: "Ties things or hangs people." },
-        { word: "PILLOW", clue: "Smothers you in your sleep." },
-        { word: "POISON", clue: "Mix it in their tea." },
-        { word: "FIRE", clue: "Burns the house to ashes." },
-        { word: "WATER", clue: "You can drown in it." },
-        { word: "BRICK", clue: "Smash it on their head." },
-        { word: "GLASS", clue: "Sharp shards cut very deep." },
-        { word: "WIRE", clue: "Chokes them from behind." },
-        { word: "AXE", clue: "Chops wood and human bones." },
-        { word: "CAR", clue: "Run them over at night." },
-        { word: "DRUG", clue: "Puts them to sleep forever." },
-        { word: "CLIFF", clue: "Push them off the edge." },
-        { word: "CHOKE", clue: "Squeeze the neck very hard." },
-        { word: "DOG", clue: "Let the beast bite them." },
-        { word: "BLADE", clue: "A small sharp metal slice." },
-        { word: "NAIL", clue: "Hammer it into the skull." },
-        { word: "DART", clue: "Shot from a blowpipe." },
-        { word: "GUN", clue: "Loud bang and sudden death." },
-        { word: "DROWN", clue: "Hold their head underwater." },
-        { word: "GHOST", clue: "Dead soul watching you sleep." },
-        { word: "BLOOD", clue: "Red liquid inside of you." },
-        { word: "GRAVE", clue: "Hole in the ground." },
-        { word: "SCAR", clue: "Mark left after the cut." },
-        { word: "BITE", clue: "Teeth sinking into flesh." }
+    Short: [
+        { word: "BONE", clue: "Skeleton remains", clue2: "White and rigid." }, 
+        { word: "WOLF", clue: "Howls in the dark", clue2: "Full moon predator." }, 
+        { word: "TOMB", clue: "Stone resting place", clue2: "Found in a graveyard." },
+        { word: "FEAR", clue: "Terror in mind", clue2: "Makes your heart race." }, 
+        { word: "GORE", clue: "Bloody scene", clue2: "A lot of spilled blood." }, 
+        { word: "DARK", clue: "No light", clue2: "When the sun goes down." },
+        { word: "EVIL", clue: "Opposite of good", clue2: "Sinister and wicked." }, 
+        { word: "PREY", clue: "Hunted one", clue2: "The victim of a hunt." }, 
+        { word: "BATS", clue: "Night flyers", clue2: "Hang upside down in caves." }
     ],
     Medium: [
-        { word: "HATCHET", clue: "Small axe for quick chops." },
-        { word: "CYANIDE", clue: "Deadly fast acting toxic chemical." },
-        { word: "BASEMENT", clue: "Where the bodies are hidden." },
-        { word: "FREEZER", clue: "Keeps the dead meat cold." },
-        { word: "SCISSORS", clue: "Sharp tool in your drawer." },
-        { word: "HAMMER", clue: "Heavy tool to crush skulls." },
-        { word: "MACHETE", clue: "Heavy blade for butchering meat." },
-        { word: "VENOM", clue: "Snake bite that kills you." },
-        { word: "BULLET", clue: "Metal entering the brain fast." },
-        { word: "NEEDLE", clue: "Injecting deadly air into veins." },
-        { word: "RAZOR", clue: "Slitting the wrist very cleanly." },
-        { word: "DAGGER", clue: "Short knife for stabbing chests." },
-        { word: "SCALPEL", clue: "Surgical tool that cuts skin." },
-        { word: "SICKLE", clue: "Curved blade for cutting throats." },
-        { word: "MALLET", clue: "Wooden hammer to break bones." },
-        { word: "SHOVEL", clue: "Used to bury them alive." },
-        { word: "CROWBAR", clue: "Heavy iron bar swinging down." },
-        { word: "WRENCH", clue: "Blunt force trauma to head." },
-        { word: "ACID", clue: "Melts the face right off." },
-        { word: "TOXIC", clue: "Gas that destroys the lungs." },
-        { word: "STARVE", clue: "Lock them up without food." },
-        { word: "BURIED", clue: "Trapped alive under the dirt." },
-        { word: "HANGED", clue: "Kicking air on a rope." },
-        { word: "SCREAM", clue: "The last sound they make." },
-        { word: "CORPSE", clue: "The cold dead body left." }
+        { word: "SHADOW", clue: "Lurks in dark", clue2: "Dark shape behind you." }, 
+        { word: "COFFIN", clue: "Six feet under box", clue2: "Vampire's bed." }, 
+        { word: "SCREAM", clue: "Sound of agony", clue2: "Vocal reaction to terror." },
+        { word: "ZOMBIE", clue: "Walking dead", clue2: "Craves human brains." }, 
+        { word: "CORPSE", clue: "Lifeless body", clue2: "No pulse, no breath." }, 
+        { word: "CURSED", clue: "Under dark spell", clue2: "Doomed by magic." },
+        { word: "DEMONS", clue: "Entities from hell", clue2: "Summoned from the underworld." }, 
+        { word: "RITUAL", clue: "Blood ceremony", clue2: "Chanting in a circle." }
     ],
-    Hard: [
-        { word: "SUFFOCATE", clue: "No air left to breathe." },
-        { word: "APPARITION", clue: "Faint ghost in the hallway." },
-        { word: "CHAINSAW", clue: "Loud motor that cuts flesh." },
-        { word: "ARSENIC", clue: "Untraceable deadly toxic white powder." },
-        { word: "PARALYZE", clue: "Cannot move while they attack." },
-        { word: "TORTURE", clue: "Slow and very painful death." },
-        { word: "SLAUGHTER", clue: "Killing like a farm animal." },
-        { word: "INFECTION", clue: "Dirty wound rotting the body." },
-        { word: "OVERDOSE", clue: "Too many pills at once." },
-        { word: "CRUSHED", clue: "Heavy weight breaking the ribs." },
-        { word: "FREEZING", clue: "Turning to ice in winter." },
-        { word: "BURNING", clue: "Flesh melting in the fire." },
-        { word: "STALKER", clue: "Following you in the dark." },
-        { word: "SHOTGUN", clue: "Blows the whole head off." },
-        { word: "HARPOON", clue: "Spear fired into the chest." },
-        { word: "CLEAVER", clue: "Heavy chopping blade in kitchen." },
-        { word: "HACKSAW", clue: "Slowly cutting through the bone." },
-        { word: "BASEBALL", clue: "Bat used to smash faces." },
-        { word: "INTRUDER", clue: "Someone broke into the house." },
-        { word: "HOSTAGE", clue: "Tied to a chair forever." },
-        { word: "KIDNAP", clue: "Thrown into a dark van." },
-        { word: "PITCHFORK", clue: "Long farming tool for stabbing." },
-        { word: "CROSSBOW", clue: "Silent arrow into the neck." },
-        { word: "INCINERATOR", clue: "Burns bodies to hide evidence." },
-        { word: "STABBING", clue: "Multiple knife wounds in back." }
+    Long: [
+        { word: "NOSFERATU", clue: "Ancient bloodsucker", clue2: "Classic bald vampire." }, 
+        { word: "EXECUTION", clue: "Swift cut to head", clue2: "The final punishment." },
+        { word: "NIGHTMARE", clue: "Dream you can't wake from", clue2: "Waking up in a cold sweat." }, 
+        { word: "CEMETERY", clue: "Graveyard full of tombstones", clue2: "Filled with dead bodies." },
+        { word: "SACRIFICE", clue: "Offering to dark gods", clue2: "Blood offered to the gods." }, 
+        { word: "BLOODSHED", clue: "Massacre & violence", clue2: "Carnage and slaughter." }
     ],
-    SuperHard: [
-        { word: "STRANGULATION", clue: "Hands tightly gripping the neck." },
-        { word: "GUILLOTINE", clue: "Drops fast to slice heads." },
-        { word: "ASPHYXIATION", clue: "Dying from total oxygen lack." },
-        { word: "HEMORRHAGE", clue: "Severe bleeding from the inside." },
-        { word: "DISEMBOWEL", clue: "Removing the guts and organs." },
-        { word: "ELECTROCUTION", clue: "High voltage stopping your heart." },
-        { word: "DECAPITATION", clue: "Head completely removed from body." },
-        { word: "MUTILATION", clue: "Destroying body beyond any recognition." },
-        { word: "LOBOTOMY", clue: "Needle through the brain eye." },
-        { word: "PSYCHOPATH", clue: "Killer with zero human empathy." },
-        { word: "CANNIBALISM", clue: "Eating the flesh of humans." },
-        { word: "DISMEMBER", clue: "Chopping off arms and legs." },
-        { word: "EVISCERATE", clue: "Slashing open the belly wide." },
-        { word: "LACERATION", clue: "Deep jagged cut on skin." },
-        { word: "PUNCTURE", clue: "Deep hole into the lung." },
-        { word: "TOURNIQUET", clue: "Tying off the blood flow." },
-        { word: "STRYCHNINE", clue: "Poison causing severe muscle spasms." },
-        { word: "CHLOROFORM", clue: "Chemical rag over the mouth." },
-        { word: "BELLADONNA", clue: "Deadly nightshade plant toxin extract." },
-        { word: "RICIN", clue: "Lethal poison from castor beans." },
-        { word: "HEMLOCK", clue: "Toxic plant that killed Socrates." },
-        { word: "ANTHRAX", clue: "Deadly white powder in mail." },
-        { word: "BOTULISM", clue: "Toxin paralyzing the respiratory muscles." },
-        { word: "BLOODHOUND", clue: "Dogs tracking your fearful scent." },
-        { word: "MUTANT", clue: "Deformed creature in the woods." }
+    Extreme: [
+        { word: "RESURRECTION", clue: "Rising from dead", clue2: "Coming back to life." }, 
+        { word: "CLAUSTROPHOBIA", clue: "Fear of trapped darkness", clue2: "Panic in small spaces." },
+        { word: "NECROMANCER", clue: "Raiser of corpses", clue2: "Dark magic user." }, 
+        { word: "EXCOMMUNICATION", clue: "Cast to damnation", clue2: "Banished from the church." },
+        { word: "SCHIZOPHRENIA", clue: "Mind fracturing", clue2: "Hearing voices." }, 
+        { word: "ASPHYXIATION", clue: "Suffocating to death", clue2: "Choking on lack of air." }
     ]
 };
 
-// Word Tracker to prevent repetition
-let usedWordsTracker = { Easy: [], Medium: [], Hard: [], SuperHard: [] };
-
 const levelsData = Array.from({length: 20}, (_, i) => {
     let id = i + 1; let diff, diffKey, pts;
-    if (id <= 5) { diff = "Easy"; diffKey = "Easy"; pts = 10; } 
+    if (id <= 5) { diff = "Easy"; diffKey = "Short"; pts = 10; } 
     else if (id <= 10) { diff = "Medium"; diffKey = "Medium"; pts = 15; } 
-    else if (id <= 15) { diff = "Hard"; diffKey = "Hard"; pts = 20; } 
-    else { diff = "Super Hard"; diffKey = "SuperHard"; pts = 30; }
+    else if (id <= 15) { diff = "Hard"; diffKey = "Long"; pts = 20; } 
+    else { diff = "Super Hard"; diffKey = "Extreme"; pts = 30; }
     return { id, title: `Chamber ${id}`, diff, diffKey, pts, unlockPts: (id - 1) * 10 };
 });
 
@@ -172,6 +98,7 @@ const sounds = {
 // ==========================================
 let authenticatedUser = localStorage.getItem('currentUser') || "";
 let totalPoints = 0; let completedLevels = []; let currentLevelIndex = 0; 
+let usedWordsTracker = { Short: [], Medium: [], Long: [], Extreme: [] };
 
 const screens = { auth: document.getElementById('auth-page'), landing: document.getElementById('landing-page'), levelSelect: document.getElementById('level-page'), game: document.getElementById('game-page') };
 function showScreen(screenKey) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[screenKey].classList.add('active'); }
@@ -201,10 +128,8 @@ document.getElementById('sign-in-btn').addEventListener('click', () => {
 function loadUserData() { 
     totalPoints = parseInt(localStorage.getItem(`pts_${authenticatedUser}`)) || 0; 
     completedLevels = JSON.parse(localStorage.getItem(`comp_${authenticatedUser}`)) || []; 
-    // Load word tracker memory
     let savedTracker = localStorage.getItem(`tracker_${authenticatedUser}`);
     if(savedTracker) usedWordsTracker = JSON.parse(savedTracker);
-    
     document.getElementById('map-player-name').innerText = authenticatedUser; updateStatsUI(); 
 }
 
@@ -241,36 +166,33 @@ function renderLevelGrid() {
 }
 
 // ==========================================
-// 4. GAMEPLAY ENGINE
+// 4. GAMEPLAY ENGINE (With Extra Clue Logic)
 // ==========================================
-let currentWord = "", currentClue = "", guessedLetters = new Set();
-let mistakes = 0, hintsUsed = 0, timeRemaining = 15, timerInterval = null, isLevelStarted = false;
+let currentWord = "", currentClue = "", currentClue2 = "", guessedLetters = new Set();
+let mistakes = 0, hintsUsed = 0, extraClueUsed = false;
+let timeRemaining = 15, timerInterval = null, isLevelStarted = false;
 
 const timerSelect = document.getElementById('timer-select'); const timerDisplay = document.getElementById('timer-display');
 const wordDisplay = document.getElementById('word-display'); const keyboardDiv = document.getElementById('keyboard');
 const startExecutionBtn = document.getElementById('start-execution-btn'); const restartLevelBtn = document.getElementById('restart-level-btn');
 const hintBtn = document.getElementById('hint-btn'); const victimInput = document.getElementById('victim-name');
+const extraClueBtn = document.getElementById('extra-clue-btn'); 
+const extraClueContainer = document.getElementById('extra-clue-container');
+const extraClueText = document.getElementById('extra-clue');
 
 function prepareLevel(index) {
     currentLevelIndex = index; const lvl = levelsData[index];
     const diffKey = lvl.diffKey; 
     
-    // Non-repeating Word Logic
     let availableWords = wordsPool[diffKey].filter(obj => !usedWordsTracker[diffKey].includes(obj.word));
-    
-    // If all words in category used, reset the tracker for that category
-    if(availableWords.length === 0) {
-        usedWordsTracker[diffKey] = [];
-        availableWords = wordsPool[diffKey];
-    }
+    if(availableWords.length === 0) { usedWordsTracker[diffKey] = []; availableWords = wordsPool[diffKey]; }
     
     const randomWordObj = availableWords[Math.floor(Math.random() * availableWords.length)];
     currentWord = randomWordObj.word.toUpperCase(); 
     currentClue = randomWordObj.clue;
+    currentClue2 = randomWordObj.clue2;
     
-    // Mark word as used
-    usedWordsTracker[diffKey].push(currentWord);
-    saveProgress();
+    usedWordsTracker[diffKey].push(currentWord); saveProgress();
 
     document.getElementById('current-level-badge').innerText = `CHAMBER ${lvl.id} OF 20`;
     document.getElementById('level-title-display').innerText = `CHAMBER ${lvl.id}`;
@@ -282,9 +204,16 @@ function prepareLevel(index) {
 }
 
 function resetBoardState() {
-    clearInterval(timerInterval); isLevelStarted = false; hintsUsed = 0;
+    clearInterval(timerInterval); isLevelStarted = false; hintsUsed = 0; extraClueUsed = false;
     startExecutionBtn.classList.remove('hidden-btn'); restartLevelBtn.classList.add('hidden-btn');
+    
     hintBtn.innerText = "👁️ Reveal Letter (-2 Pts)";
+    hintBtn.classList.remove('disabled');
+    
+    extraClueBtn.innerText = "📜 Extra Clue (-3 Pts)";
+    extraClueBtn.classList.remove('disabled');
+    extraClueContainer.classList.add('hidden-btn');
+
     guessedLetters.clear(); mistakes = 0; document.getElementById('mistake-count').innerText = mistakes;
     document.querySelectorAll('.draw-part').forEach(p => p.classList.remove('visible'));
     
@@ -340,13 +269,7 @@ restartLevelBtn.addEventListener('click', () => prepareLevel(currentLevelIndex))
 function updateTimer() {
     if (!isLevelStarted) return;
     timeRemaining--; timerDisplay.innerText = formatTime(timeRemaining);
-    
-    // HEARTBEAT LAST 10 SECONDS
-    if (timeRemaining <= 10 && timeRemaining > 0) {
-        timerDisplay.classList.add('panic');
-        sounds.heartbeat();
-    }
-    
+    if (timeRemaining <= 10 && timeRemaining > 0) { timerDisplay.classList.add('panic'); sounds.heartbeat(); }
     if (timeRemaining <= 0) triggerDeath();
 }
 
@@ -414,11 +337,34 @@ function triggerDeath() {
     }, 1400);
 }
 
+// Reveal Letter (-2 Pts)
 document.getElementById('hint-btn').addEventListener('click', () => {
-    if (!isLevelStarted) return; if (hintsUsed >= 1) { alert("⚠️ No more hints for you."); return; }
+    if (!isLevelStarted) return; if (hintsUsed >= 1) { alert("⚠️ Reveal letter chance already used."); return; }
     let unGuessed = currentWord.split('').filter(c => !guessedLetters.has(c));
-    if (unGuessed.length > 0) { totalPoints = Math.max(0, totalPoints - 2); saveProgress(); hintsUsed++; hintBtn.innerText = "👁️ Hint Used"; handleGuess(unGuessed[0]); }
+    if (unGuessed.length > 0) { 
+        totalPoints = Math.max(0, totalPoints - 2); saveProgress(); 
+        hintsUsed++; 
+        hintBtn.innerText = "👁️ Letter Revealed"; 
+        hintBtn.classList.add('disabled');
+        handleGuess(unGuessed[0]); 
+    }
 });
+
+// Extra Clue (-3 Pts)
+extraClueBtn.addEventListener('click', () => {
+    if (!isLevelStarted) return; 
+    if (extraClueUsed) { alert("⚠️ Extra clue already used."); return; }
+    
+    totalPoints = Math.max(0, totalPoints - 3); saveProgress();
+    extraClueUsed = true;
+    
+    extraClueBtn.innerText = "📜 Clue Used";
+    extraClueBtn.classList.add('disabled');
+    
+    extraClueText.innerText = currentClue2;
+    extraClueContainer.classList.remove('hidden-btn');
+});
+
 document.getElementById('give-up-btn').addEventListener('click', () => { if (isLevelStarted) triggerDeath(); });
 
 // ==========================================

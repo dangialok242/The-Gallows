@@ -49,13 +49,7 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 .difficulty-tag { font-size: 0.9rem; font-weight: bold; color: var(--text); }
 
 /* Premium Stats Footer */
-.premium-stats {
-    margin-top: auto;
-    background: linear-gradient(180deg, rgba(20,0,0,0.8) 0%, rgba(50,0,0,0.9) 100%);
-    padding: 15px; border-radius: 8px; border: 1px solid #ff1a1a;
-    box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 0 15px rgba(255,0,0,0.2);
-    text-align: center;
-}
+.premium-stats { margin-top: auto; background: linear-gradient(180deg, rgba(20,0,0,0.8) 0%, rgba(50,0,0,0.9) 100%); padding: 15px; border-radius: 8px; border: 1px solid #ff1a1a; box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 0 15px rgba(255,0,0,0.2); text-align: center; }
 .premium-stats h3 { font-family: 'Creepster', cursive; font-size: 1.6rem; color: #ff3333; text-shadow: 0 0 10px red; margin-bottom: 5px; letter-spacing: 2px;}
 .score-display { font-family: monospace; font-size: 1.1rem; color: #aaa; font-weight: bold; }
 .score-neon { font-size: 2rem; color: #00ff66; text-shadow: 0 0 15px #00ff66; display: block; margin-top: 5px; font-weight: 900;}
@@ -116,8 +110,8 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 .key.disabled { opacity: 0.2; pointer-events: none; border-color: #333; box-shadow: none; transform: translateY(4px); }
 .key.correct { background: #004d00; color: #00ff66; border-color: #00ff66; box-shadow: 0 0 15px #00ff66; opacity: 1; }
 .key.wrong { background: #4d0000; color: red; opacity: 0.5; border: none; }
-.action-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 8px; z-index: 2; position: relative; }
-.mistake-counter { text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--muted); z-index: 2; position: relative; }
+.action-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 8px; z-index: 2; position: relative; }
+.mistake-counter { text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--muted); z-index: 2; position: relative; margin-top: 5px;}
 
 /* EFFECTS */
 .shake-hard { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; background-color: #440000 !important; }
@@ -134,69 +128,17 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 .unlock-theme { border-color: var(--success); box-shadow: 0 0 60px rgba(0, 255, 102, 0.5); }
 .chain-break-icon { font-size: 3rem; margin-bottom: 10px; animation: bounce 1s infinite alternate; }
 
-/* 💀 MOVABLE REALISTIC HANGING MAN ANIMATIONS 💀 */
-.hanging-execution-scene {
-    position: relative;
-    width: 200px;
-    height: 240px;
-    margin: 5px auto 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.swinging-corpse-svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
-
-/* Pendulum physical swing from gallows hook (x=100, y=14) */
-.corpse-pendulum {
-    transform-origin: 100px 14px;
-    animation: realisticBodySwing 3.2s ease-in-out infinite alternate;
-}
-
-@keyframes realisticBodySwing {
-    0% { transform: rotate(-9deg); }
-    50% { transform: rotate(7deg); }
-    100% { transform: rotate(-9deg); }
-}
-
-/* Secondary inert sway for arms */
-.arm-left {
-    transform-origin: 86px 81px;
-    animation: armSwayLeft 3.2s ease-in-out infinite alternate;
-}
-.arm-right {
-    transform-origin: 114px 81px;
-    animation: armSwayRight 3.2s ease-in-out infinite alternate;
-}
-
-@keyframes armSwayLeft {
-    0% { transform: rotate(-4deg); }
-    100% { transform: rotate(6deg); }
-}
-@keyframes armSwayRight {
-    0% { transform: rotate(-6deg); }
-    100% { transform: rotate(4deg); }
-}
-
-/* Ground shadow shifting with the body */
-.corpse-shadow {
-    width: 90px;
-    height: 14px;
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, transparent 75%);
-    border-radius: 50%;
-    margin-top: -10px;
-    animation: shadowSway 3.2s ease-in-out infinite alternate;
-}
-
-@keyframes shadowSway {
-    0% { transform: translateX(-16px) scale(0.9); opacity: 0.6; }
-    50% { transform: translateX(12px) scale(0.9); opacity: 0.6; }
-    100% { transform: translateX(-16px) scale(0.9); opacity: 0.6; }
-}
+/* MOVABLE REALISTIC HANGING MAN */
+.hanging-execution-scene { position: relative; width: 200px; height: 240px; margin: 5px auto 10px; display: flex; flex-direction: column; align-items: center; }
+.swinging-corpse-svg { width: 100%; height: 100%; overflow: visible; }
+.corpse-pendulum { transform-origin: 100px 14px; animation: realisticBodySwing 3.2s ease-in-out infinite alternate; }
+@keyframes realisticBodySwing { 0% { transform: rotate(-9deg); } 50% { transform: rotate(7deg); } 100% { transform: rotate(-9deg); } }
+.arm-left { transform-origin: 86px 81px; animation: armSwayLeft 3.2s ease-in-out infinite alternate; }
+.arm-right { transform-origin: 114px 81px; animation: armSwayRight 3.2s ease-in-out infinite alternate; }
+@keyframes armSwayLeft { 0% { transform: rotate(-4deg); } 100% { transform: rotate(6deg); } }
+@keyframes armSwayRight { 0% { transform: rotate(-6deg); } 100% { transform: rotate(4deg); } }
+.corpse-shadow { width: 90px; height: 14px; background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, transparent 75%); border-radius: 50%; margin-top: -10px; animation: shadowSway 3.2s ease-in-out infinite alternate; }
+@keyframes shadowSway { 0% { transform: translateX(-16px) scale(0.9); opacity: 0.6; } 50% { transform: translateX(12px) scale(0.9); opacity: 0.6; } 100% { transform: translateX(-16px) scale(0.9); opacity: 0.6; } }
 
 /* Jumpscare */
 #jumpscare { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; display: flex; align-items: center; justify-content: center; animation: strobe 0.05s infinite; }
