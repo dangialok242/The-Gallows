@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE GALLOWS</title>
-    <!-- 💀 SKULL FAVICON ADDED HERE 💀 -->
+    <title>THE GALLOWS: Death Pact</title>
+    <!-- 💀 SKULL FAVICON 💀 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -34,20 +34,29 @@
         </div>
     </div>
 
-    <!-- AUTH PAGE -->
+    <!-- AUTH PAGE (With 'Designed by Dangi') -->
     <div id="auth-page" class="screen">
         <div class="auth-container tagda-board flickering">
             <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF BLOOD</h1>
-            <p style="color: #aaa; margin-bottom: 25px; font-style: italic;">Identify yourself , Executioner</p>
+            <p style="color: #aaa; margin-bottom: 25px; font-style: italic;">Identify yourself, Executioner...</p>
+            
             <label class="red-label" style="text-align: left;">Executioner Username</label>
             <input type="text" id="auth-user" placeholder="Enter your dark name..." autocomplete="off">
+            
             <label class="red-label" style="text-align: left; margin-top: 15px;">Secret Passcode</label>
             <input type="password" id="auth-pass" placeholder="Enter your death code...">
+            
             <p id="auth-msg" class="red glitch" style="margin-top: 15px; min-height: 20px; font-weight: bold;"></p>
+            
             <div class="auth-btns" style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
                 <button id="sign-in-btn" class="glow-btn danger">SIGN IN</button>
                 <button id="sign-up-btn" class="glow-btn outline">SIGN UP</button>
             </div>
+
+            <!-- WATERMARK ADDED HERE -->
+            <p style="margin-top: 30px; font-family: 'Creepster', cursive; color: #660000; font-size: 1.3rem; letter-spacing: 3px; text-shadow: 0 0 5px rgba(255,0,0,0.3);">
+                DESIGNED BY DANGI
+            </p>
         </div>
     </div>
 
@@ -55,7 +64,7 @@
     <div id="landing-page" class="screen">
         <div class="landing-content flickering">
             <h1 class="spooky-title">THE GALLOWS</h1>
-            <p class="spooky-subtitle">20 Chambers Infinite Terror</p>
+            <p class="spooky-subtitle">20 Chambers. Infinite Terror.</p>
             <div class="landing-btns" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
                 <button id="enter-game-btn" class="glow-btn danger" style="font-size: 1.5rem; padding: 15px 30px;">ENTER THE NIGHTMARE</button>
                 <button id="logout-btn-landing" class="glow-btn outline small">LOGOUT (FLEE)</button>
@@ -85,6 +94,7 @@
     <div id="game-page" class="screen">
         <div class="game-container">
             
+            <!-- ALIGNED & STYLED LEFT PANEL -->
             <div class="panel settings-panel">
                 <div class="settings-top">
                     <div class="level-badge" id="current-level-badge">CHAMBER 1 OF 20</div>
@@ -111,6 +121,7 @@
                     </div>
                 </div>
 
+                <!-- SURVIVAL RECORD -->
                 <div class="stats-box premium-stats">
                     <h3>🩸 SURVIVAL RECORD</h3>
                     <div class="score-display">
@@ -119,6 +130,7 @@
                 </div>
             </div>
 
+            <!-- RIGHT PANEL (GAME AREA) -->
             <div class="panel game-area tagda-board">
                 <div class="premium-top-bar">
                     <div class="premium-plate victim-display">
