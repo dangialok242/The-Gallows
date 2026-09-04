@@ -1,5 +1,44 @@
 // ==========================================
-// 1. DYNAMIC WORD ENGINE (With 2 Clues per word)
+// 1. FULLSCREEN & SMART TRAP LOGIC
+// ==========================================
+function goFullscreen() {
+    try {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => console.log(err));
+        }
+    } catch(e) {}
+}
+
+// TRAP TRIGGERS ONLY WHEN GAME IS CURRENTLY BEING PLAYED
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && isLevelStarted) {
+        document.getElementById('coward-overlay').classList.remove('hidden');
+    }
+});
+
+function addClick(id, handler) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', handler);
+}
+
+addClick('return-to-hell-btn', () => {
+    goFullscreen();
+    document.getElementById('coward-overlay').classList.add('hidden');
+});
+
+function showScaryToast(msg) {
+    const toast = document.getElementById('scary-toast');
+    toast.innerText = msg;
+    toast.classList.remove('hidden');
+    toast.style.opacity = 1;
+    setTimeout(() => {
+        toast.style.opacity = 0;
+        setTimeout(() => toast.classList.add('hidden'), 300);
+    }, 3000);
+}
+
+// ==========================================
+// 2. DYNAMIC WORD ENGINE
 // ==========================================
 const wordsPool = {
     Short: [
@@ -51,7 +90,7 @@ const levelsData = Array.from({length: 20}, (_, i) => {
 });
 
 // ==========================================
-// 2. AUDIO SYNTHESIZER
+// 3. AUDIO SYNTHESIZER
 // ==========================================
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
@@ -94,27 +133,30 @@ const sounds = {
 };
 
 // ==========================================
-// 3. AUTHENTICATION & MULTI-USER STORAGE
+// 4. AUTH & MULTI-USER STORAGE
 // ==========================================
 let authenticatedUser = localStorage.getItem('currentUser') || "";
 let totalPoints = 0; let completedLevels = []; let currentLevelIndex = 0; 
-let usedWordsTracker = { Short: [], Medium: [], Long: [], Extreme: [] };
+let globalUsedWords = [];
 
 const screens = { auth: document.getElementById('auth-page'), landing: document.getElementById('landing-page'), levelSelect: document.getElementById('level-page'), game: document.getElementById('game-page') };
 function showScreen(screenKey) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[screenKey].classList.add('active'); }
 
-window.addEventListener('DOMContentLoaded', () => { if (authenticatedUser) { loadUserData(); showScreen('landing'); } else { showScreen('auth'); } });
+window.addEventListener('DOMContentLoaded', () => { 
+    if (authenticatedUser) { loadUserData(); showScreen('landing'); } 
+    else { showScreen('auth'); } 
+});
 
-document.getElementById('sign-up-btn').addEventListener('click', () => {
+addClick('sign-up-btn', () => {
     initAudio();
     const user = document.getElementById('auth-user').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
-    if(!user || !pass) { document.getElementById('auth-msg').innerText = "Username and Passcode required!"; return; }
-    if(localStorage.getItem(`pwd_${user}`)) { document.getElementById('auth-msg').innerText = "Soul already claimed! Sign in instead."; return; }
+    if(!user || !pass) { showScaryToast("USERNAME AND PASSCODE REQUIRED!"); return; }
+    if(localStorage.getItem(`pwd_${user}`)) { showScaryToast("SOUL ALREADY CLAIMED! SIGN IN."); return; }
     localStorage.setItem(`pwd_${user}`, pass);
     document.getElementById('auth-msg').style.color = "var(--success)"; document.getElementById('auth-msg').innerText = "Pact Sealed! Now click SIGN IN.";
 });
 
-document.getElementById('sign-in-btn').addEventListener('click', () => {
+addClick('sign-in-btn', () => {
     initAudio();
     const user = document.getElementById('auth-user').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
     const msg = document.getElementById('auth-msg'); msg.style.color = "var(--danger)";
@@ -128,30 +170,60 @@ document.getElementById('sign-in-btn').addEventListener('click', () => {
 function loadUserData() { 
     totalPoints = parseInt(localStorage.getItem(`pts_${authenticatedUser}`)) || 0; 
     completedLevels = JSON.parse(localStorage.getItem(`comp_${authenticatedUser}`)) || []; 
-    let savedTracker = localStorage.getItem(`tracker_${authenticatedUser}`);
-    if(savedTracker) usedWordsTracker = JSON.parse(savedTracker);
+    let loadedWords = JSON.parse(localStorage.getItem(`tracker_${authenticatedUser}`));
+    globalUsedWords = Array.isArray(loadedWords) ? loadedWords : [];
     document.getElementById('map-player-name').innerText = authenticatedUser; updateStatsUI(); 
 }
 
 function saveProgress() { 
     localStorage.setItem(`pts_${authenticatedUser}`, totalPoints); 
     localStorage.setItem(`comp_${authenticatedUser}`, JSON.stringify(completedLevels)); 
-    localStorage.setItem(`tracker_${authenticatedUser}`, JSON.stringify(usedWordsTracker)); 
+    localStorage.setItem(`tracker_${authenticatedUser}`, JSON.stringify(globalUsedWords)); 
     updateStatsUI(); 
 }
 
 function updateStatsUI() { document.getElementById('map-total-score').innerText = totalPoints; document.getElementById('current-score').innerText = totalPoints; }
 
 function logoutUser() { authenticatedUser = ""; localStorage.removeItem('currentUser'); document.getElementById('auth-user').value = ""; document.getElementById('auth-pass').value = ""; showScreen('auth'); }
-document.getElementById('logout-btn-landing').addEventListener('click', logoutUser); document.getElementById('logout-btn-map').addEventListener('click', logoutUser);
+addClick('logout-btn-landing', logoutUser);
+addClick('logout-btn-map', logoutUser);
 
-document.getElementById('enter-game-btn').addEventListener('click', () => { initAudio(); renderLevelGrid(); showScreen('levelSelect'); });
-document.getElementById('map-back-btn').addEventListener('click', () => showScreen('landing'));
+addClick('enter-game-btn', () => { 
+    initAudio(); 
+    goFullscreen(); 
+    renderLevelGrid(); 
+    showScreen('levelSelect'); 
+});
+addClick('map-back-btn', () => showScreen('landing'));
 
-document.getElementById('back-to-levels-btn').addEventListener('click', () => { clearInterval(timerInterval); renderLevelGrid(); showScreen('levelSelect'); });
-document.getElementById('unlock-to-map-btn').addEventListener('click', () => { document.getElementById('unlock-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
-document.getElementById('lose-to-map-btn').addEventListener('click', () => { document.getElementById('lose-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
-document.getElementById('retry-level-btn').addEventListener('click', () => { document.getElementById('lose-modal').classList.remove('show'); prepareLevel(currentLevelIndex); });
+// ==========================================
+// 5. GAMEPLAY ENGINE & SAFE BUTTON LOGIC
+// ==========================================
+let currentWord = "", currentClue = "", currentClue2 = "", guessedLetters = new Set();
+let mistakes = 0, hintsUsed = 0, extraClueUsed = false;
+let timeRemaining = 15, timerInterval = null, isLevelStarted = false;
+
+const timerSelect = document.getElementById('timer-select'); const timerDisplay = document.getElementById('timer-display');
+const wordDisplay = document.getElementById('word-display'); const keyboardDiv = document.getElementById('keyboard');
+const startExecutionBtn = document.getElementById('start-execution-btn'); const restartLevelBtn = document.getElementById('restart-level-btn');
+const backToLevelsBtn = document.getElementById('back-to-levels-btn');
+const hintBtn = document.getElementById('hint-btn'); const victimInput = document.getElementById('victim-name');
+const extraClueBtn = document.getElementById('extra-clue-btn'); 
+const extraClueContainer = document.getElementById('extra-clue-container'); const extraClueText = document.getElementById('extra-clue');
+
+addClick('unlock-to-map-btn', () => { document.getElementById('unlock-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
+addClick('lose-to-map-btn', () => { document.getElementById('lose-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
+
+addClick('retry-level-btn', () => { 
+    document.getElementById('lose-modal').classList.remove('show'); 
+    prepareLevel(currentLevelIndex); 
+});
+
+addClick('back-to-levels-btn', () => { 
+    clearInterval(timerInterval); 
+    renderLevelGrid(); 
+    showScreen('levelSelect'); 
+});
 
 function renderLevelGrid() {
     const grid = document.getElementById('level-grid'); grid.innerHTML = ''; updateStatsUI();
@@ -165,39 +237,12 @@ function renderLevelGrid() {
     });
 }
 
-// ==========================================
-// 4. GAMEPLAY ENGINE (With Extra Clue Logic)
-// ==========================================
-let currentWord = "", currentClue = "", currentClue2 = "", guessedLetters = new Set();
-let mistakes = 0, hintsUsed = 0, extraClueUsed = false;
-let timeRemaining = 15, timerInterval = null, isLevelStarted = false;
-
-const timerSelect = document.getElementById('timer-select'); const timerDisplay = document.getElementById('timer-display');
-const wordDisplay = document.getElementById('word-display'); const keyboardDiv = document.getElementById('keyboard');
-const startExecutionBtn = document.getElementById('start-execution-btn'); const restartLevelBtn = document.getElementById('restart-level-btn');
-const hintBtn = document.getElementById('hint-btn'); const victimInput = document.getElementById('victim-name');
-const extraClueBtn = document.getElementById('extra-clue-btn'); 
-const extraClueContainer = document.getElementById('extra-clue-container');
-const extraClueText = document.getElementById('extra-clue');
-
 function prepareLevel(index) {
     currentLevelIndex = index; const lvl = levelsData[index];
-    const diffKey = lvl.diffKey; 
     
-    let availableWords = wordsPool[diffKey].filter(obj => !usedWordsTracker[diffKey].includes(obj.word));
-    if(availableWords.length === 0) { usedWordsTracker[diffKey] = []; availableWords = wordsPool[diffKey]; }
-    
-    const randomWordObj = availableWords[Math.floor(Math.random() * availableWords.length)];
-    currentWord = randomWordObj.word.toUpperCase(); 
-    currentClue = randomWordObj.clue;
-    currentClue2 = randomWordObj.clue2;
-    
-    usedWordsTracker[diffKey].push(currentWord); saveProgress();
-
     document.getElementById('current-level-badge').innerText = `CHAMBER ${lvl.id} OF 20`;
     document.getElementById('level-title-display').innerText = `CHAMBER ${lvl.id}`;
     document.getElementById('level-diff-tag').innerText = `Difficulty: ${lvl.diff.toUpperCase()} (+${lvl.pts} Pts)`;
-    
     victimInput.value = ""; document.getElementById('display-player').innerText = `Waiting...`;
     
     showScreen('game'); resetBoardState();
@@ -205,20 +250,19 @@ function prepareLevel(index) {
 
 function resetBoardState() {
     clearInterval(timerInterval); isLevelStarted = false; hintsUsed = 0; extraClueUsed = false;
-    startExecutionBtn.classList.remove('hidden-btn'); restartLevelBtn.classList.add('hidden-btn');
     
-    hintBtn.innerText = "👁️ Reveal Letter (-2 Pts)";
-    hintBtn.classList.remove('disabled');
-    
-    extraClueBtn.innerText = "📜 Extra Clue (-3 Pts)";
-    extraClueBtn.classList.remove('disabled');
+    startExecutionBtn.classList.remove('hidden-btn'); 
+    restartLevelBtn.classList.add('hidden-btn');
+    backToLevelsBtn.classList.remove('hidden-btn'); // Back button is normal before game starts
+
+    hintBtn.innerText = "👁️ Reveal Letter (-2 Pts)"; hintBtn.classList.remove('disabled');
+    extraClueBtn.innerText = "📜 Extra Clue (-3 Pts)"; extraClueBtn.classList.remove('disabled');
     extraClueContainer.classList.add('hidden-btn');
 
     guessedLetters.clear(); mistakes = 0; document.getElementById('mistake-count').innerText = mistakes;
     document.querySelectorAll('.draw-part').forEach(p => p.classList.remove('visible'));
     
-    timerDisplay.innerText = "00:15"; timerSelect.value = "15"; 
-    timerDisplay.classList.remove('panic');
+    timerDisplay.innerText = "00:15"; timerSelect.value = "15"; timerDisplay.classList.remove('panic');
     document.getElementById('current-clue').innerText = "Will reveal upon start...";
     wordDisplay.innerHTML = `<div class="scary-placeholder">AWAITING EXECUTION...</div>`;
     
@@ -243,15 +287,40 @@ function buildKeyboard(isDisabled) {
 
 timerSelect.addEventListener('change', () => { if (!isLevelStarted) timerDisplay.innerText = formatTime(parseInt(timerSelect.value)); });
 
+// START EXECUTION LOGIC
 startExecutionBtn.addEventListener('click', () => {
     initAudio();
     const vName = victimInput.value.trim();
-    if(vName === "") { alert("⚠️ Enter the VICTIM'S NAME before starting the execution!"); victimInput.focus(); return; }
+    if(vName === "") { 
+        showScaryToast("THE REAPER DEMANDS A VICTIM'S NAME!"); 
+        victimInput.focus(); return; 
+    }
+    victimInput.blur(); 
     
+    let tVal = parseInt(timerSelect.value); let lvlId = levelsData[currentLevelIndex].id; let pool = [];
+    if (tVal === 15) pool = wordsPool.Short.concat(wordsPool.Medium);
+    else if (tVal === 30) pool = wordsPool.Medium.concat(wordsPool.Long);
+    else if (tVal === 60) pool = wordsPool.Long.concat(wordsPool.Extreme);
+    else pool = wordsPool.Extreme;
+
+    let available = pool.filter(obj => !globalUsedWords.includes(obj.word.toUpperCase()));
+    if (available.length === 0) {
+        globalUsedWords = globalUsedWords.filter(w => !pool.some(p => p.word.toUpperCase() === w));
+        available = pool;
+    }
+
+    const randomWordObj = available[Math.floor(Math.random() * available.length)];
+    currentWord = randomWordObj.word.toUpperCase(); currentClue = randomWordObj.clue; currentClue2 = randomWordObj.clue2;
+    
+    globalUsedWords.push(currentWord); saveProgress(); 
+
     document.getElementById('current-clue').innerText = currentClue;
     document.getElementById('display-player').innerText = vName;
     
-    startExecutionBtn.classList.add('hidden-btn'); restartLevelBtn.classList.remove('hidden-btn');
+    startExecutionBtn.classList.add('hidden-btn'); 
+    restartLevelBtn.classList.remove('hidden-btn');
+    backToLevelsBtn.classList.add('hidden-btn'); // NO ESCAPE ONCE STARTED
+
     isLevelStarted = true; buildKeyboard(false); 
     
     wordDisplay.innerHTML = "";
@@ -260,11 +329,40 @@ startExecutionBtn.addEventListener('click', () => {
         wordDisplay.appendChild(box);
     }
 
-    timeRemaining = parseInt(timerSelect.value); timerDisplay.innerText = formatTime(timeRemaining);
+    timeRemaining = tVal; timerDisplay.innerText = formatTime(timeRemaining);
     timerInterval = setInterval(updateTimer, 1000);
 });
 
-restartLevelBtn.addEventListener('click', () => prepareLevel(currentLevelIndex));
+// CONTROL KEY SHORTCUT SYSTEM
+window.addEventListener('keydown', (e) => { 
+    // SHOW SHORTCUTS ON CTRL PRESS
+    if (e.key === "Control" || e.ctrlKey) { 
+        document.getElementById('shortcuts-overlay').classList.remove('hidden'); 
+    }
+    
+    if (document.activeElement === victimInput && e.key !== "Enter") return;
+
+    if (!isLevelStarted) {
+        if (e.key === "Enter" && screens.game.classList.contains('active') && !startExecutionBtn.classList.contains('hidden-btn')) {
+            startExecutionBtn.click();
+        }
+        return;
+    }
+
+    if (e.key === "1") hintBtn.click();
+    if (e.key === "2") extraClueBtn.click();
+    if (e.key === "0") document.getElementById('give-up-btn').click();
+
+    const char = e.key.toUpperCase(); 
+    if (char >= 'A' && char <= 'Z' && char.length === 1) handleGuess(char); 
+});
+
+window.addEventListener('keyup', (e) => {
+    // HIDE SHORTCUTS ON CTRL RELEASE
+    if (e.key === "Control" || !e.ctrlKey) { 
+        document.getElementById('shortcuts-overlay').classList.add('hidden'); 
+    }
+});
 
 function updateTimer() {
     if (!isLevelStarted) return;
@@ -305,10 +403,10 @@ function handleGuess(char) {
     }
 }
 
-window.addEventListener('keydown', (e) => { if (!isLevelStarted) return; const char = e.key.toUpperCase(); if (char >= 'A' && char <= 'Z' && char.length === 1) handleGuess(char); });
-
 function handleLevelWin() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
+    backToLevelsBtn.classList.remove('hidden-btn'); 
+
     const lvl = levelsData[currentLevelIndex];
     totalPoints += lvl.pts; if (!completedLevels.includes(lvl.id)) completedLevels.push(lvl.id); saveProgress();
 
@@ -321,11 +419,9 @@ function handleLevelWin() {
     }
 }
 
-document.getElementById('next-level-btn').addEventListener('click', () => { document.getElementById('unlock-modal').classList.remove('show'); if (currentLevelIndex + 1 < levelsData.length) prepareLevel(currentLevelIndex + 1); else { renderLevelGrid(); showScreen('levelSelect'); } });
-document.querySelectorAll('.modal-next-btn').forEach(b => b.addEventListener('click', () => { document.getElementById('win-modal').classList.remove('show'); let nextLvl = levelsData[currentLevelIndex + 1]; if (nextLvl && totalPoints >= nextLvl.unlockPts) prepareLevel(currentLevelIndex + 1); else { renderLevelGrid(); showScreen('levelSelect'); } }));
-
 function triggerDeath() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
+    backToLevelsBtn.classList.remove('hidden-btn');
     sounds.extremeJumpscare(); 
     
     const jumpscare = document.getElementById('jumpscare'); jumpscare.classList.remove('hidden');
@@ -337,38 +433,27 @@ function triggerDeath() {
     }, 1400);
 }
 
-// Reveal Letter (-2 Pts)
-document.getElementById('hint-btn').addEventListener('click', () => {
-    if (!isLevelStarted) return; if (hintsUsed >= 1) { alert("⚠️ Reveal letter chance already used."); return; }
+addClick('hint-btn', () => {
+    if (!isLevelStarted) return; if (hintsUsed >= 1) { showScaryToast("⚠️ REVEAL LETTER CHANCE ALREADY USED!"); return; }
     let unGuessed = currentWord.split('').filter(c => !guessedLetters.has(c));
     if (unGuessed.length > 0) { 
         totalPoints = Math.max(0, totalPoints - 2); saveProgress(); 
-        hintsUsed++; 
-        hintBtn.innerText = "👁️ Letter Revealed"; 
-        hintBtn.classList.add('disabled');
+        hintsUsed++; hintBtn.innerText = "👁️ Letter Revealed"; hintBtn.classList.add('disabled');
         handleGuess(unGuessed[0]); 
     }
 });
 
-// Extra Clue (-3 Pts)
-extraClueBtn.addEventListener('click', () => {
-    if (!isLevelStarted) return; 
-    if (extraClueUsed) { alert("⚠️ Extra clue already used."); return; }
-    
-    totalPoints = Math.max(0, totalPoints - 3); saveProgress();
-    extraClueUsed = true;
-    
-    extraClueBtn.innerText = "📜 Clue Used";
-    extraClueBtn.classList.add('disabled');
-    
-    extraClueText.innerText = currentClue2;
-    extraClueContainer.classList.remove('hidden-btn');
+addClick('extra-clue-btn', () => {
+    if (!isLevelStarted) return; if (extraClueUsed) { showScaryToast("⚠️ EXTRA CLUE ALREADY USED!"); return; }
+    totalPoints = Math.max(0, totalPoints - 3); saveProgress(); extraClueUsed = true;
+    extraClueBtn.innerText = "📜 Clue Used"; extraClueBtn.classList.add('disabled');
+    extraClueText.innerText = currentClue2; extraClueContainer.classList.remove('hidden-btn');
 });
 
-document.getElementById('give-up-btn').addEventListener('click', () => { if (isLevelStarted) triggerDeath(); });
+addClick('give-up-btn', () => { if (isLevelStarted) triggerDeath(); });
 
 // ==========================================
-// 5. BACKGROUND PARTICLES 
+// 6. BACKGROUND PARTICLES 
 // ==========================================
 const canvas = document.getElementById('particles'), ctx = canvas.getContext('2d');
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }

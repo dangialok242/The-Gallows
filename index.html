@@ -11,6 +11,30 @@
     <div id="blood-overlay"></div>
     <canvas id="particles"></canvas>
 
+    <div id="scary-toast" class="hidden">THE REAPER DEMANDS A NAME!</div>
+
+    <div id="coward-overlay" class="hidden">
+        <div class="coward-content pop-out-anim">
+            <h1 style="font-family: 'Creepster', cursive; font-size: 5rem; color: #ff0000; text-shadow: 0 0 40px red; margin-bottom: 10px;">💀 DAR GAYE? LOSER! 💀</h1>
+            <p style="font-size: 1.5rem; color: #fff; margin: 20px 0; font-weight: bold;">Bina khele fattu ki tarah bhag raha hai? Himmat hai toh ye game jeet ke dikha!</p>
+            <p style="font-size: 1.1rem; color: #ff5555; font-style: italic; margin-bottom: 30px;">(You cannot escape while an execution is in progress)</p>
+            <button id="return-to-hell-btn" class="glow-btn danger" style="font-size: 1.4rem; padding: 15px 30px; animation: heartbeat 1.5s infinite;">MAI FATTU NAHI HU (RESUME)</button>
+        </div>
+    </div>
+
+    <div id="shortcuts-overlay" class="hidden">
+        <h2>📜 TOME OF SHORTCUTS 📜</h2>
+        <div class="shortcut-list">
+            <p><kbd>CTRL</kbd> HOLD TO VIEW SHORTCUTS</p>
+            <p><kbd>ENTER</kbd> EMBRACE DOOM (Start)</p>
+            <p><kbd>1</kbd> REVEAL LETTER (-2 Pts)</p>
+            <p><kbd>2</kbd> EXTRA CLUE (-3 Pts)</p>
+            <p><kbd>0</kbd> SURRENDER SOUL</p>
+            <p><kbd>A-Z</kbd> GUESS LETTER</p>
+        </div>
+        <p style="font-size: 1.1rem; color: #aaa; margin-top: 30px;">Release CTRL to close</p>
+    </div>
+
     <div id="jumpscare" class="hidden">
         <div class="ghost-face">
             <div class="ghost-eyes"><div class="eye left"></div><div class="eye right"></div></div>
@@ -22,27 +46,19 @@
     <div id="scare-right" class="side-scare right">👹</div>
     <div id="scare-bottom" class="side-scare bottom">🧟</div>
 
-    <div id="unlock-modal" class="modal-overlay">
-        <div class="modal-content unlock-theme">
-            <div class="chain-break-icon">🩸 ➔ 💥 ➔ 🔓</div>
-            <h2 class="modal-title green glow-text">CHAMBER UNLOCKED!</h2>
-            <p id="unlock-desc">You survived! New nightmare awaits.</p>
-            <div class="points-reward" id="points-earned-badge">+0 POINTS</div>
-            <button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button>
-            <button id="unlock-to-map-btn" class="glow-btn outline" style="margin-top: 10px;">LEVEL MAP</button>
-        </div>
-    </div>
-
-    <!-- AUTH PAGE -->
-    <div id="auth-page" class="screen">
+    <div id="auth-page" class="screen active">
         <div class="auth-container tagda-board flickering">
             <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF BLOOD</h1>
             <p style="color: #aaa; margin-bottom: 25px; font-style: italic;">Identify yourself, Executioner...</p>
+            
             <label class="red-label" style="text-align: left;">Executioner Username</label>
             <input type="text" id="auth-user" placeholder="Enter your dark name..." autocomplete="off">
+            
             <label class="red-label" style="text-align: left; margin-top: 15px;">Secret Passcode</label>
             <input type="password" id="auth-pass" placeholder="Enter your death code...">
+            
             <p id="auth-msg" class="red glitch" style="margin-top: 15px; min-height: 20px; font-weight: bold;"></p>
+            
             <div class="auth-btns" style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
                 <button id="sign-in-btn" class="glow-btn danger">SIGN IN</button>
                 <button id="sign-up-btn" class="glow-btn outline">SIGN UP</button>
@@ -53,7 +69,6 @@
         </div>
     </div>
 
-    <!-- LANDING PAGE -->
     <div id="landing-page" class="screen">
         <div class="landing-content flickering">
             <h1 class="spooky-title">THE GALLOWS</h1>
@@ -65,7 +80,6 @@
         </div>
     </div>
 
-    <!-- LEVEL MAP -->
     <div id="level-page" class="screen">
         <div class="level-container">
             <div class="level-header">
@@ -83,10 +97,8 @@
         </div>
     </div>
 
-    <!-- GAMEPLAY PAGE -->
     <div id="game-page" class="screen">
         <div class="game-container">
-            
             <div class="panel settings-panel">
                 <div class="settings-top">
                     <div class="level-badge" id="current-level-badge">CHAMBER 1 OF 20</div>
@@ -105,7 +117,7 @@
 
                     <div class="difficulty-tag" id="level-diff-tag" style="margin-bottom: 15px;">Difficulty: EASY (+10 Pts)</div>
 
-                    <button id="start-execution-btn" class="glow-btn danger full-width" style="font-size: 1.1rem; animation: heartbeat 2s infinite;">💀 EMBRACE DOOM</button>
+                    <button id="start-execution-btn" class="glow-btn danger full-width" style="font-size: 1.1rem; animation: heartbeat 1.5s infinite;">💀 EMBRACE DOOM</button>
 
                     <div class="controls-box">
                         <button id="restart-level-btn" class="glow-btn danger small full-width hidden-btn">⟲ ACCEPT FATE (RETRY)</button>
@@ -115,20 +127,14 @@
 
                 <div class="stats-box premium-stats">
                     <h3>🩸 SURVIVAL RECORD</h3>
-                    <div class="score-display">
-                        Total Points: <span id="current-score" class="score-neon">0</span>
-                    </div>
+                    <div class="score-display">Total Points: <span id="current-score" class="score-neon">0</span></div>
                 </div>
             </div>
 
             <div class="panel game-area tagda-board">
                 <div class="premium-top-bar">
-                    <div class="premium-plate victim-display">
-                        💀 Victim: <span id="display-player" class="accent">Waiting...</span>
-                    </div>
-                    <div class="premium-plate timer-display">
-                        ⏱️ <span id="timer-display" class="neon-timer">00:15</span>
-                    </div>
+                    <div class="premium-plate victim-display">💀 Victim: <span id="display-player" class="accent">Waiting...</span></div>
+                    <div class="premium-plate timer-display">⏱️ <span id="timer-display" class="neon-timer">00:15</span></div>
                 </div>
 
                 <div class="canvas-container">
@@ -146,9 +152,7 @@
                     </svg>
                 </div>
 
-                <div id="word-display" class="word-boxes">
-                    <div class="scary-placeholder">AWAITING EXECUTION...</div>
-                </div>
+                <div id="word-display" class="word-boxes"><div class="scary-placeholder">AWAITING EXECUTION...</div></div>
                 
                 <div style="text-align: center;">
                     <p class="hint-text">Clue: <span id="current-clue" class="accent">Will reveal upon start...</span></p>
@@ -157,32 +161,23 @@
 
                 <div id="keyboard" class="keyboard"></div>
 
-                <!-- ADDED THE MISSING EXTRA CLUE BUTTON HERE -->
                 <div class="action-buttons">
                     <button id="extra-clue-btn" class="glow-btn small">📜 Extra Clue (-3 Pts)</button>
                     <button id="hint-btn" class="glow-btn small">👁️ Reveal Letter (-2 Pts)</button>
-                    <button id="give-up-btn" class="glow-btn small danger">🏳 Surrender Soul</button>
+                    <button id="give-up-btn" class="glow-btn small danger">🏳 Surrender</button>
                 </div>
                 <p class="mistake-counter">Bones Broken: <span id="mistake-count">0</span> / 10</p>
             </div>
         </div>
     </div>
 
-    <!-- WIN MODAL -->
-    <div id="win-modal" class="modal-overlay">
-        <div class="modal-content win-theme">
-            <h2 class="modal-title green">SURVIVED!</h2>
-            <p>The victim lives... for now.</p>
-            <p class="final-word">Word: <span id="win-word"></span></p>
-            <button class="glow-btn modal-next-btn">PROCEED</button>
-        </div>
-    </div>
+    <div id="unlock-modal" class="modal-overlay"><div class="modal-content unlock-theme"><div class="chain-break-icon">🩸 ➔ 💥 ➔ 🔓</div><h2 class="modal-title green glow-text">CHAMBER UNLOCKED!</h2><p id="unlock-desc">You survived! New nightmare awaits.</p><div class="points-reward" id="points-earned-badge">+0 POINTS</div><button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button><button id="unlock-to-map-btn" class="glow-btn outline" style="margin-top: 10px;">LEVEL MAP</button></div></div>
     
-    <!-- LOSE MODAL (WITH MOVING HANGED MAN) -->
+    <div id="win-modal" class="modal-overlay"><div class="modal-content win-theme"><h2 class="modal-title green">SURVIVED!</h2><p>The victim lives... for now.</p><p class="final-word">Word: <span id="win-word"></span></p><button class="glow-btn modal-next-btn">PROCEED</button></div></div>
+    
     <div id="lose-modal" class="modal-overlay">
         <div class="modal-content lose-theme">
             <h2 class="modal-title red blood-drop-title">EXECUTED...</h2>
-            
             <div class="hanging-execution-scene">
                 <svg viewBox="0 0 200 240" class="swinging-corpse-svg">
                     <rect x="20" y="2" width="160" height="12" fill="#2b1408" stroke="#120502" stroke-width="2" rx="2" />
@@ -191,32 +186,18 @@
                         <line x1="100" y1="16" x2="100" y2="60" stroke="#b08852" stroke-width="4.5" stroke-dasharray="4,1" />
                         <ellipse cx="100" cy="62" rx="6" ry="7" fill="#6d491f" stroke="#3d260c" stroke-width="2" />
                         <g class="dead-body">
-                            <g transform="translate(100, 64) rotate(16)">
-                                <ellipse cx="0" cy="14" rx="13" ry="16" fill="#889689" stroke="#364237" stroke-width="1.5" />
-                                <path d="M -12,6 Q 0,-5 12,3 Q 15,16 10,22 Q 0,18 -12,16 Z" fill="#181311" />
-                                <line x1="-7" y1="13" x2="-2" y2="17" stroke="#220505" stroke-width="2" />
-                                <line x1="-2" y1="13" x2="-7" y2="17" stroke="#220505" stroke-width="2" />
-                                <line x1="2" y1="13" x2="7" y2="17" stroke="#220505" stroke-width="2" />
-                                <line x1="7" y1="13" x2="2" y2="17" stroke="#220505" stroke-width="2" />
-                                <ellipse cx="1" cy="23" rx="4" ry="5" fill="#1a0000" />
-                                <path d="M 1,27 Q 2,34 0,38" stroke="#aa0000" stroke-width="2" fill="none" />
-                            </g>
-                            <path d="M 85,78 L 115,78 L 112,138 L 88,138 Z" fill="#23262d" stroke="#101217" stroke-width="1.8" />
-                            <path d="M 92,86 L 100,102 L 105,88 L 108,106" stroke="#660000" stroke-width="2.5" fill="none" />
-                            <g class="arm-left"><path d="M 86,81 Q 75,105 73,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" /><ellipse cx="72" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(8, 72, 136)" /></g>
-                            <g class="arm-right"><path d="M 114,81 Q 125,105 127,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" /><ellipse cx="128" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(-8, 128, 136)" /></g>
-                            <path d="M 91,138 L 89,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" /><path d="M 89,185 Q 88,196 86,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" />
-                            <path d="M 109,138 L 111,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" /><path d="M 111,185 Q 112,196 114,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" />
+                            <g transform="translate(100, 64) rotate(16)"><ellipse cx="0" cy="14" rx="13" ry="16" fill="#889689" stroke="#364237" stroke-width="1.5" /><path d="M -12,6 Q 0,-5 12,3 Q 15,16 10,22 Q 0,18 -12,16 Z" fill="#181311" /><line x1="-7" y1="13" x2="-2" y2="17" stroke="#220505" stroke-width="2" /><line x1="-2" y1="13" x2="-7" y2="17" stroke="#220505" stroke-width="2" /><line x1="2" y1="13" x2="7" y2="17" stroke="#220505" stroke-width="2" /><line x1="7" y1="13" x2="2" y2="17" stroke="#220505" stroke-width="2" /><ellipse cx="1" cy="23" rx="4" ry="5" fill="#1a0000" /><path d="M 1,27 Q 2,34 0,38" stroke="#aa0000" stroke-width="2" fill="none" /></g>
+                            <path d="M 85,78 L 115,78 L 112,138 L 88,138 Z" fill="#23262d" stroke="#101217" stroke-width="1.8" /><path d="M 92,86 L 100,102 L 105,88 L 108,106" stroke="#660000" stroke-width="2.5" fill="none" />
+                            <g class="arm-left"><path d="M 86,81 Q 75,105 73,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" /><ellipse cx="72" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(8, 72, 136)" /></g><g class="arm-right"><path d="M 114,81 Q 125,105 127,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" /><ellipse cx="128" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(-8, 128, 136)" /></g>
+                            <path d="M 91,138 L 89,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" /><path d="M 89,185 Q 88,196 86,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" /><path d="M 109,138 L 111,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" /><path d="M 111,185 Q 112,196 114,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" />
                         </g>
                     </g>
                 </svg>
                 <div class="corpse-shadow"></div>
             </div>
-
             <p class="final-word" style="margin-top: 5px;">The secret word was: <span id="lose-word" class="accent"></span></p>
             <div style="display: flex; gap: 12px; justify-content: center; margin-top: 15px;">
                 <button class="glow-btn danger" id="retry-level-btn">RETRY CHAMBER</button>
-                <button class="glow-btn outline" id="lose-to-map-btn">LEVEL MAP</button>
             </div>
         </div>
     </div>

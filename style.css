@@ -1,25 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Jolly+Lodger&family=Inter:wght@400;700;900&display=swap');
 
-:root {
-    --bg: #030101; --card: #0a0404; --accent: #ff9900;
-    --danger: #ff0000; --success: #00ff66; --muted: #888; --text: #e6e6e6;
-}
-
+:root { --bg: #030101; --card: #0a0404; --accent: #ff9900; --danger: #ff0000; --success: #00ff66; --muted: #888; --text: #e6e6e6; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; user-select: none; }
 
 #blood-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, rgba(60, 0, 0, 0.7) 100%); pointer-events: none; z-index: 5; }
 #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-
 .screen { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; z-index: 10; }
 .screen.active { display: flex; }
 .hidden-btn { display: none !important; }
+
+/* 💀 EGO HURT TRAP MODAL 💀 */
+#coward-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; }
+#coward-overlay.hidden { display: none; }
+.coward-content { background: #110000; border: 2px solid red; padding: 50px; border-radius: 15px; box-shadow: 0 0 80px red; max-width: 700px; }
+@keyframes popOut { 0% { transform: scale(0); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+.pop-out-anim { animation: popOut 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+/* SHORTCUTS OVERLAY */
+#shortcuts-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ff3333; font-family: 'Creepster', cursive; text-shadow: 0 0 20px red; }
+#shortcuts-overlay.hidden { display: none; }
+#shortcuts-overlay h2 { font-size: 4rem; margin-bottom: 30px; letter-spacing: 5px; }
+.shortcut-list p { margin: 15px 0; display: flex; align-items: center; gap: 15px; font-family: 'Inter', sans-serif; font-weight: bold; color: white; text-shadow: none; font-size: 1.2rem;}
+.shortcut-list kbd { background: #330000; border: 2px solid red; padding: 6px 15px; border-radius: 6px; color: #ff6666; font-family: monospace; box-shadow: 0 0 10px red; min-width: 60px; text-align: center;}
+
+/* SCARY TOAST */
+#scary-toast { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: rgba(30,0,0,0.95); border: 2px solid red; color: #ff3333; padding: 15px 30px; font-weight: 900; z-index: 10005; box-shadow: 0 0 30px red; text-transform: uppercase; font-family: monospace; letter-spacing: 1.5px; transition: opacity 0.3s ease; text-align: center; border-radius: 8px;}
+#scary-toast.hidden { display: none; }
 
 /* Premium Plates & Typography */
 .premium-plate { background: linear-gradient(145deg, #1a0000, #330000); border: 1px solid #550000; box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 0 10px rgba(255,0,0,0.2); padding: 8px 15px; border-radius: 6px; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
 .neon-timer { font-family: monospace; font-size: 1.6rem; color: #ff2a2a; text-shadow: 0 0 15px #ff0000; font-weight: 900; }
 .neon-timer.panic { color: #fff; text-shadow: 0 0 20px red; animation: strobe 0.2s infinite; }
-
 .spooky-title { font-family: 'Creepster', cursive; font-size: 6.5rem; color: var(--danger); text-shadow: 0 0 40px red, 3px 3px 0px #300; letter-spacing: 6px; margin-bottom: 5px; text-align: center; }
 .spooky-subtitle { font-family: 'Jolly Lodger', cursive; font-size: 2.2rem; color: #aaa; margin-bottom: 30px; text-align: center;}
 .blood-text { font-family: 'Creepster', cursive; color: var(--danger); font-size: 1.8rem; letter-spacing: 2px; }
@@ -41,14 +53,12 @@ input, select { background: rgba(0,0,0,0.8); border: 1px solid #ff2a2a; color: w
 input::placeholder { color: #552222; font-style: italic; font-weight: bold;}
 input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 
-/* Left Panel Alignment */
+/* Panels */
 .settings-panel { display: flex; flex-direction: column; justify-content: space-between; height: 100%; background: #0f0505; border: 1px solid #300 !important; }
 .settings-top { display: flex; flex-direction: column; }
 .controls-box { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
 .level-badge { background: #330000; color: #ff5555; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: 900; letter-spacing: 1px; display: inline-block; margin-bottom: 5px;}
 .difficulty-tag { font-size: 0.9rem; font-weight: bold; color: var(--text); }
-
-/* Premium Stats Footer */
 .premium-stats { margin-top: auto; background: linear-gradient(180deg, rgba(20,0,0,0.8) 0%, rgba(50,0,0,0.9) 100%); padding: 15px; border-radius: 8px; border: 1px solid #ff1a1a; box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 0 15px rgba(255,0,0,0.2); text-align: center; }
 .premium-stats h3 { font-family: 'Creepster', cursive; font-size: 1.6rem; color: #ff3333; text-shadow: 0 0 10px red; margin-bottom: 5px; letter-spacing: 2px;}
 .score-display { font-family: monospace; font-size: 1.1rem; color: #aaa; font-weight: bold; }
@@ -83,7 +93,7 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 .level-card.completed .card-diff { color: var(--success); }
 .level-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,0,0,0.3); padding-top: 10px; }
 
-/* TAGDA BOARD UI (Main Play Area) */
+/* TAGDA BOARD UI */
 .tagda-board { background: radial-gradient(circle at center, rgba(30,0,0,0.5) 0%, rgba(5,0,0,0.95) 100%), url('https://www.transparenttextures.com/patterns/black-scales.png'); border: 2px solid #660000; box-shadow: inset 0 0 50px rgba(0,0,0,1); position: relative; }
 .tagda-board::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 20px red; pointer-events: none; border-radius: 12px; opacity: 0.3; }
 .premium-top-bar { display: flex; justify-content: space-between; border-bottom: 2px solid #550000; padding-bottom: 12px; z-index: 2; margin-bottom: 5px;}
@@ -93,7 +103,7 @@ input:focus, select:focus { box-shadow: 0 0 15px red; border-color: red; }
 .draw-part.visible { opacity: 1; }
 .rope { stroke: #aa0000; stroke-width: 6; }
 .body-part { stroke: #ff0000; filter: drop-shadow(0 0 10px red); }
-.hint-text { text-align: center; color: #ccc; font-size: 0.95rem; font-style: italic; z-index: 2; position: relative;}
+.hint-text { color: #ccc; font-size: 0.95rem; font-style: italic; z-index: 2; position: relative;}
 
 /* WORD BOXES */
 .word-boxes { display: flex; justify-content: center; gap: 8px; margin: 10px 0; z-index: 2; position: relative; flex-wrap: wrap; min-height: 60px; align-items: center;}
