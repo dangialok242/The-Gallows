@@ -1,5 +1,5 @@
 // ==========================================
-// 1. FULLSCREEN & SMART TRAP LOGIC
+// 1. FULLSCREEN & EGO TRAP LOGIC
 // ==========================================
 function goFullscreen() {
     try {
@@ -9,6 +9,17 @@ function goFullscreen() {
     } catch(e) {}
 }
 
+const fsBtn = document.getElementById('fullscreen-btn');
+fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+        fsBtn.innerText = "✖ EXIT";
+    } else {
+        document.exitFullscreen();
+        fsBtn.innerText = "⛶ FULLSCREEN";
+    }
+});
+
 // TRAP TRIGGERS ONLY WHEN GAME IS CURRENTLY BEING PLAYED
 document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement && isLevelStarted) {
@@ -16,6 +27,7 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
+// Safe Button Event Binder to prevent freeze bugs
 function addClick(id, handler) {
     const el = document.getElementById(id);
     if (el) el.addEventListener('click', handler);
@@ -188,6 +200,7 @@ function logoutUser() { authenticatedUser = ""; localStorage.removeItem('current
 addClick('logout-btn-landing', logoutUser);
 addClick('logout-btn-map', logoutUser);
 
+// AUTO FULLSCREEN ON ENTRY
 addClick('enter-game-btn', () => { 
     initAudio(); 
     goFullscreen(); 
@@ -211,6 +224,7 @@ const hintBtn = document.getElementById('hint-btn'); const victimInput = documen
 const extraClueBtn = document.getElementById('extra-clue-btn'); 
 const extraClueContainer = document.getElementById('extra-clue-container'); const extraClueText = document.getElementById('extra-clue');
 
+// GLOBAL MODALS EVENTS
 addClick('unlock-to-map-btn', () => { document.getElementById('unlock-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
 addClick('lose-to-map-btn', () => { document.getElementById('lose-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
 
@@ -253,7 +267,7 @@ function resetBoardState() {
     
     startExecutionBtn.classList.remove('hidden-btn'); 
     restartLevelBtn.classList.add('hidden-btn');
-    backToLevelsBtn.classList.remove('hidden-btn'); // Back button is normal before game starts
+    backToLevelsBtn.classList.remove('hidden-btn'); // Let user flee BEFORE starting
 
     hintBtn.innerText = "👁️ Reveal Letter (-2 Pts)"; hintBtn.classList.remove('disabled');
     extraClueBtn.innerText = "📜 Extra Clue (-3 Pts)"; extraClueBtn.classList.remove('disabled');
@@ -287,8 +301,8 @@ function buildKeyboard(isDisabled) {
 
 timerSelect.addEventListener('change', () => { if (!isLevelStarted) timerDisplay.innerText = formatTime(parseInt(timerSelect.value)); });
 
-// START EXECUTION LOGIC
-startExecutionBtn.addEventListener('click', () => {
+// START EXECUTION LOGIC (NO BUG)
+addClick('start-execution-btn', () => {
     initAudio();
     const vName = victimInput.value.trim();
     if(vName === "") { 
@@ -344,13 +358,13 @@ window.addEventListener('keydown', (e) => {
 
     if (!isLevelStarted) {
         if (e.key === "Enter" && screens.game.classList.contains('active') && !startExecutionBtn.classList.contains('hidden-btn')) {
-            startExecutionBtn.click();
+            document.getElementById('start-execution-btn').click();
         }
         return;
     }
 
-    if (e.key === "1") hintBtn.click();
-    if (e.key === "2") extraClueBtn.click();
+    if (e.key === "1") document.getElementById('hint-btn').click();
+    if (e.key === "2") document.getElementById('extra-clue-btn').click();
     if (e.key === "0") document.getElementById('give-up-btn').click();
 
     const char = e.key.toUpperCase(); 
@@ -405,7 +419,7 @@ function handleGuess(char) {
 
 function handleLevelWin() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
-    backToLevelsBtn.classList.remove('hidden-btn'); 
+    backToLevelsBtn.classList.remove('hidden-btn'); // Escape Unlocked!
 
     const lvl = levelsData[currentLevelIndex];
     totalPoints += lvl.pts; if (!completedLevels.includes(lvl.id)) completedLevels.push(lvl.id); saveProgress();
@@ -419,9 +433,12 @@ function handleLevelWin() {
     }
 }
 
+addClick('next-level-btn', () => { document.getElementById('unlock-modal').classList.remove('show'); if (currentLevelIndex + 1 < levelsData.length) prepareLevel(currentLevelIndex + 1); else { renderLevelGrid(); showScreen('levelSelect'); } });
+document.querySelectorAll('.modal-next-btn').forEach(b => b.addEventListener('click', () => { document.getElementById('win-modal').classList.remove('show'); let nextLvl = levelsData[currentLevelIndex + 1]; if (nextLvl && totalPoints >= nextLvl.unlockPts) prepareLevel(currentLevelIndex + 1); else { renderLevelGrid(); showScreen('levelSelect'); } }));
+
 function triggerDeath() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
-    backToLevelsBtn.classList.remove('hidden-btn');
+    backToLevelsBtn.classList.remove('hidden-btn'); // Escape Unlocked even on death!
     sounds.extremeJumpscare(); 
     
     const jumpscare = document.getElementById('jumpscare'); jumpscare.classList.remove('hidden');
@@ -438,7 +455,7 @@ addClick('hint-btn', () => {
     let unGuessed = currentWord.split('').filter(c => !guessedLetters.has(c));
     if (unGuessed.length > 0) { 
         totalPoints = Math.max(0, totalPoints - 2); saveProgress(); 
-        hintsUsed++; hintBtn.innerText = "👁️ Letter Revealed"; hintBtn.classList.add('disabled');
+        hintsUsed++; document.getElementById('hint-btn').innerText = "👁️ Letter Revealed"; document.getElementById('hint-btn').classList.add('disabled');
         handleGuess(unGuessed[0]); 
     }
 });
@@ -446,7 +463,7 @@ addClick('hint-btn', () => {
 addClick('extra-clue-btn', () => {
     if (!isLevelStarted) return; if (extraClueUsed) { showScaryToast("⚠️ EXTRA CLUE ALREADY USED!"); return; }
     totalPoints = Math.max(0, totalPoints - 3); saveProgress(); extraClueUsed = true;
-    extraClueBtn.innerText = "📜 Clue Used"; extraClueBtn.classList.add('disabled');
+    document.getElementById('extra-clue-btn').innerText = "📜 Clue Used"; document.getElementById('extra-clue-btn').classList.add('disabled');
     extraClueText.innerText = currentClue2; extraClueContainer.classList.remove('hidden-btn');
 });
 
