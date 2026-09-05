@@ -8,7 +8,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="theme-blood">
     <div id="blood-overlay"></div>
     <canvas id="particles"></canvas>
 
@@ -18,14 +18,14 @@
     <!-- 💀 EGO-HURTING COWARD TRAP 💀 -->
     <div id="coward-overlay" class="hidden">
         <div class="coward-content pop-out-anim">
-            <h1 style="font-family: 'Creepster', cursive; font-size: 4.5rem; color: #ff0000; text-shadow: 0 0 40px red; margin-bottom: 10px;">💀 DAR GAYE? LOSER! 💀</h1>
+            <h1 class="trap-title">💀 DAR GAYE? LOSER! 💀</h1>
             <p style="font-size: 1.5rem; color: #fff; margin: 20px 0; font-weight: bold;">Bina khele fattu ki tarah bhag raha hai? Himmat hai toh ye game jeet ke dikha!</p>
-            <p style="font-size: 1.1rem; color: #ff5555; font-style: italic; margin-bottom: 30px;">(You cannot escape while an execution is in progress)</p>
+            <p style="font-size: 1.1rem; color: var(--danger); font-style: italic; margin-bottom: 30px;">(You cannot escape while an execution is in progress)</p>
             <button id="return-to-hell-btn" class="glow-btn danger" style="font-size: 1.3rem; padding: 15px 30px; animation: heartbeat 1.5s infinite;">MAI FATTU NAHI HU (RESUME)</button>
         </div>
     </div>
 
-    <!-- SHORTCUTS TOME (Shown on CTRL) -->
+    <!-- SHORTCUTS TOME -->
     <div id="shortcuts-overlay" class="hidden">
         <h2>📜 TOME OF SHORTCUTS 📜</h2>
         <div class="shortcut-list">
@@ -50,24 +50,21 @@
     <div id="scare-right" class="side-scare right">👹</div>
     <div id="scare-bottom" class="side-scare bottom">🧟</div>
 
-    <!-- UNLOCK MODAL -->
     <div id="unlock-modal" class="modal-overlay">
         <div class="modal-content unlock-theme">
             <div class="chain-break-icon">🩸 ➔ 💥 ➔ 🔓</div>
             <h2 class="modal-title green glow-text">CHAMBER UNLOCKED!</h2>
             <p id="unlock-desc">You survived! New nightmare awaits.</p>
             <div class="points-reward" id="points-earned-badge">+0 POINTS</div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-                <button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button>
-                <button id="unlock-to-map-btn" class="glow-btn outline">LEVEL MAP</button>
-            </div>
+            <button id="next-level-btn" class="glow-btn">ENTER NEXT CHAMBER</button>
+            <button id="unlock-to-map-btn" class="glow-btn outline" style="margin-top: 10px;">LEVEL MAP</button>
         </div>
     </div>
 
     <!-- AUTH PAGE -->
     <div id="auth-page" class="screen active">
         <div class="auth-container tagda-board flickering">
-            <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF BLOOD</h1>
+            <h1 class="spooky-title" style="font-size: 3.5rem; margin-bottom: 0;">PACT OF DEATH</h1>
             <p style="color: #aaa; margin-bottom: 25px; font-style: italic;">Identify yourself, Executioner...</p>
             
             <label class="red-label" style="text-align: left;">Executioner Username</label>
@@ -76,13 +73,13 @@
             <label class="red-label" style="text-align: left; margin-top: 15px;">Secret Passcode</label>
             <input type="password" id="auth-pass" placeholder="Enter your death code...">
             
-            <p id="auth-msg" class="red glitch" style="margin-top: 15px; min-height: 20px; font-weight: bold;"></p>
+            <p id="auth-msg" class="glitch" style="color: var(--danger); margin-top: 15px; min-height: 20px; font-weight: bold;"></p>
             
             <div class="auth-btns" style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
                 <button id="sign-in-btn" class="glow-btn danger">SIGN IN</button>
                 <button id="sign-up-btn" class="glow-btn outline">SIGN UP</button>
             </div>
-            <p style="margin-top: 30px; font-family: 'Creepster', cursive; color: #660000; font-size: 1.3rem; letter-spacing: 3px; text-shadow: 0 0 5px rgba(255,0,0,0.3);">
+            <p style="margin-top: 30px; font-family: 'Creepster', cursive; color: var(--dark-danger); font-size: 1.3rem; letter-spacing: 3px; text-shadow: 0 0 5px var(--glow-danger);">
                 DESIGNED BY DANGI
             </p>
         </div>
@@ -128,7 +125,7 @@
                     <h2 class="blood-text" id="level-title-display" style="font-size: 2rem; margin-bottom: 5px;">CHAMBER 1</h2>
 
                     <label class="red-label">NAME THE VICTIM</label>
-                    <input type="text" id="victim-name" placeholder="Who will hang?..." style="border-color: #ff9900; margin-bottom: 10px;">
+                    <input type="text" id="victim-name" placeholder="Who will hang?..." style="border-color: var(--accent); margin-bottom: 10px;">
 
                     <label class="red-label">TIME TO LIVE</label>
                     <select id="timer-select" style="margin-bottom: 10px;">
@@ -138,7 +135,7 @@
                         <option value="90">90s - Slow Torture</option>
                     </select>
 
-                    <div class="difficulty-tag" id="level-diff-tag" style="margin-bottom: 15px;">Difficulty: EASY (+10 Pts)</div>
+                    <div class="difficulty-tag" id="level-diff-tag" style="margin-bottom: 10px;">Difficulty: EASY (+10 Pts)</div>
 
                     <button id="start-execution-btn" class="glow-btn danger full-width" style="font-size: 1.1rem; animation: heartbeat 1.5s infinite;">💀 EMBRACE DOOM</button>
 
@@ -146,6 +143,9 @@
                         <button id="restart-level-btn" class="glow-btn danger small full-width hidden-btn">⟲ ACCEPT FATE (RETRY)</button>
                         <button id="back-to-levels-btn" class="glow-btn outline small full-width" style="margin-top: 5px;">🗺️ FLEE TO MAP</button>
                     </div>
+
+                    <!-- 🎨 THEME CHANGER BUTTON -->
+                    <button id="theme-btn" class="glow-btn outline small full-width" style="margin-top: 15px; border-color: var(--accent); color: var(--accent);">🎨 THEME: BLOOD</button>
                 </div>
 
                 <div class="stats-box premium-stats">
@@ -161,33 +161,34 @@
                     <div class="premium-plate timer-display">⏱️ <span id="timer-display" class="neon-timer">00:15</span></div>
                 </div>
 
+                <!-- RESPONSIVE SVG (Fixed for Mobile) -->
                 <div class="canvas-container">
-                    <svg height="200" width="200" class="hangman-svg">
-                        <line id="part-0" x1="10" y1="190" x2="90" y2="190" class="draw-part" />
-                        <line id="part-1" x1="50" y1="190" x2="50" y2="10" class="draw-part" />
-                        <line id="part-2" x1="50" y1="10" x2="150" y2="10" class="draw-part" />
-                        <line id="part-3" x1="150" y1="10" x2="150" y2="40" class="draw-part rope" />
-                        <circle id="part-4" cx="150" cy="55" r="15" class="draw-part body-part" />
-                        <line id="part-5" x1="150" y1="70" x2="150" y2="120" class="draw-part body-part" />
-                        <line id="part-6" x1="150" y1="80" x2="125" y2="105" class="draw-part body-part" />
-                        <line id="part-7" x1="150" y1="80" x2="175" y2="105" class="draw-part body-part" />
-                        <line id="part-8" x1="150" y1="120" x2="125" y2="155" class="draw-part body-part" />
-                        <line id="part-9" x1="150" y1="120" x2="175" y2="155" class="draw-part body-part" />
+                    <svg viewBox="0 0 200 230" class="hangman-svg" preserveAspectRatio="xMidYMid meet">
+                        <line id="part-0" x1="10" y1="220" x2="90" y2="220" class="draw-part" />
+                        <line id="part-1" x1="50" y1="220" x2="50" y2="20" class="draw-part" />
+                        <line id="part-2" x1="50" y1="20" x2="150" y2="20" class="draw-part" />
+                        <line id="part-3" x1="150" y1="20" x2="150" y2="50" class="draw-part rope" />
+                        <circle id="part-4" cx="150" cy="70" r="18" class="draw-part body-part" />
+                        <line id="part-5" x1="150" y1="88" x2="150" y2="145" class="draw-part body-part" />
+                        <line id="part-6" x1="150" y1="100" x2="120" y2="130" class="draw-part body-part" />
+                        <line id="part-7" x1="150" y1="100" x2="180" y2="130" class="draw-part body-part" />
+                        <line id="part-8" x1="150" y1="145" x2="120" y2="185" class="draw-part body-part" />
+                        <line id="part-9" x1="150" y1="145" x2="180" y2="185" class="draw-part body-part" />
                     </svg>
                 </div>
 
-                <div id="word-display" class="word-boxes"><div class="scary-placeholder">AWAITING EXECUTION...</div></div>
+                <div id="word-display" class="word-boxes"><div class="scary-placeholder">AWAITING...</div></div>
                 
                 <div style="text-align: center;">
                     <p class="hint-text">Clue: <span id="current-clue" class="accent">Will reveal upon start...</span></p>
-                    <p class="hint-text hidden-btn" id="extra-clue-container" style="margin-top: 5px; color: #ff9900;">Extra Clue: <span id="extra-clue" class="accent"></span></p>
+                    <p class="hint-text hidden-btn" id="extra-clue-container" style="margin-top: 5px; color: var(--accent);">Extra Clue: <span id="extra-clue" class="accent"></span></p>
                 </div>
 
                 <div id="keyboard" class="keyboard"></div>
 
                 <div class="action-buttons">
-                    <button id="extra-clue-btn" class="glow-btn small">📜 Clue (-3 Pts)</button>
-                    <button id="hint-btn" class="glow-btn small">👁️ Reveal (-2 Pts)</button>
+                    <button id="extra-clue-btn" class="glow-btn small">📜 Clue (-3)</button>
+                    <button id="hint-btn" class="glow-btn small">👁️ Reveal (-2)</button>
                     <button id="give-up-btn" class="glow-btn small danger">🏳 Surrender</button>
                 </div>
                 <p class="mistake-counter" style="margin-top: 5px;">Bones Broken: <span id="mistake-count">0</span> / 10</p>
@@ -195,23 +196,12 @@
         </div>
     </div>
 
-    <!-- WIN MODAL -->
-    <div id="win-modal" class="modal-overlay">
-        <div class="modal-content win-theme">
-            <h2 class="modal-title green">SURVIVED!</h2>
-            <p>The victim lives... for now.</p>
-            <p class="final-word">Word: <span id="win-word"></span></p>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-                <button class="glow-btn" id="win-next-btn">PROCEED TO NEXT</button>
-                <button class="glow-btn outline" id="win-to-map-btn">LEVEL MAP</button>
-            </div>
-        </div>
-    </div>
+    <!-- MODALS -->
+    <div id="win-modal" class="modal-overlay"><div class="modal-content win-theme"><h2 class="modal-title green">SURVIVED!</h2><p>The victim lives... for now.</p><p class="final-word">Word: <span id="win-word"></span></p><button class="glow-btn" id="win-next-btn">PROCEED</button></div></div>
     
-    <!-- LOSE MODAL -->
     <div id="lose-modal" class="modal-overlay">
         <div class="modal-content lose-theme">
-            <h2 class="modal-title red blood-drop-title">EXECUTED...</h2>
+            <h2 class="modal-title blood-drop-title" style="color: var(--danger);">EXECUTED...</h2>
             <div class="hanging-execution-scene">
                 <svg viewBox="0 0 200 240" class="swinging-corpse-svg">
                     <rect x="20" y="2" width="160" height="12" fill="#2b1408" stroke="#120502" stroke-width="2" rx="2" />
@@ -220,8 +210,8 @@
                         <line x1="100" y1="16" x2="100" y2="60" stroke="#b08852" stroke-width="4.5" stroke-dasharray="4,1" />
                         <ellipse cx="100" cy="62" rx="6" ry="7" fill="#6d491f" stroke="#3d260c" stroke-width="2" />
                         <g class="dead-body">
-                            <g transform="translate(100, 64) rotate(16)"><ellipse cx="0" cy="14" rx="13" ry="16" fill="#889689" stroke="#364237" stroke-width="1.5" /><path d="M -12,6 Q 0,-5 12,3 Q 15,16 10,22 Q 0,18 -12,16 Z" fill="#181311" /><line x1="-7" y1="13" x2="-2" y2="17" stroke="#220505" stroke-width="2" /><line x1="-2" y1="13" x2="-7" y2="17" stroke="#220505" stroke-width="2" /><line x1="2" y1="13" x2="7" y2="17" stroke="#220505" stroke-width="2" /><line x1="7" y1="13" x2="2" y2="17" stroke="#220505" stroke-width="2" /><ellipse cx="1" cy="23" rx="4" ry="5" fill="#1a0000" /><path d="M 1,27 Q 2,34 0,38" stroke="#aa0000" stroke-width="2" fill="none" /></g>
-                            <path d="M 85,78 L 115,78 L 112,138 L 88,138 Z" fill="#23262d" stroke="#101217" stroke-width="1.8" /><path d="M 92,86 L 100,102 L 105,88 L 108,106" stroke="#660000" stroke-width="2.5" fill="none" />
+                            <g transform="translate(100, 64) rotate(16)"><ellipse cx="0" cy="14" rx="13" ry="16" fill="#889689" stroke="#364237" stroke-width="1.5" /><path d="M -12,6 Q 0,-5 12,3 Q 15,16 10,22 Q 0,18 -12,16 Z" fill="#181311" /><line x1="-7" y1="13" x2="-2" y2="17" stroke="#220505" stroke-width="2" /><line x1="-2" y1="13" x2="-7" y2="17" stroke="#220505" stroke-width="2" /><line x1="2" y1="13" x2="7" y2="17" stroke="#220505" stroke-width="2" /><line x1="7" y1="13" x2="2" y2="17" stroke="#220505" stroke-width="2" /><ellipse cx="1" cy="23" rx="4" ry="5" fill="#1a0000" /><path d="M 1,27 Q 2,34 0,38" stroke="var(--danger)" stroke-width="2" fill="none" /></g>
+                            <path d="M 85,78 L 115,78 L 112,138 L 88,138 Z" fill="#23262d" stroke="#101217" stroke-width="1.8" /><path d="M 92,86 L 100,102 L 105,88 L 108,106" stroke="var(--danger)" stroke-width="2.5" fill="none" />
                             <g class="arm-left"><path d="M 86,81 Q 75,105 73,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" /><ellipse cx="72" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(8, 72, 136)" /></g><g class="arm-right"><path d="M 114,81 Q 125,105 127,132" stroke="#23262d" stroke-width="6.5" stroke-linecap="round" fill="none" /><ellipse cx="128" cy="136" rx="4" ry="5.5" fill="#889689" transform="rotate(-8, 128, 136)" /></g>
                             <path d="M 91,138 L 89,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" /><path d="M 89,185 Q 88,196 86,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" /><path d="M 109,138 L 111,185" stroke="#16181d" stroke-width="8" stroke-linecap="round" /><path d="M 111,185 Q 112,196 114,203" stroke="#3b2b1e" stroke-width="6.5" stroke-linecap="round" />
                         </g>
@@ -232,7 +222,6 @@
             <p class="final-word" style="margin-top: 5px;">The secret word was: <span id="lose-word" class="accent"></span></p>
             <div style="display: flex; gap: 12px; justify-content: center; margin-top: 15px;">
                 <button class="glow-btn danger" id="retry-level-btn">RETRY CHAMBER</button>
-                <button class="glow-btn outline" id="lose-to-map-btn">LEVEL MAP</button>
             </div>
         </div>
     </div>

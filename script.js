@@ -15,10 +15,10 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
-// Bug-Free Event Binder (Uses direct onclick assignment)
+// BUG-FREE EVENT BINDER
 function bindClick(id, handler) {
     const el = document.getElementById(id);
-    if (el) el.onclick = handler;
+    if (el) el.onclick = handler; // Overwrites any old listener, prevents duplicate bugs
 }
 
 bindClick('return-to-hell-btn', () => {
@@ -38,7 +38,35 @@ function showScaryToast(msg) {
 }
 
 // ==========================================
-// 2. DICTIONARY (EASY 3-WORD CLUES)
+// 2. THEME CHANGER (NEW FEATURE)
+// ==========================================
+const themes = ["theme-blood", "theme-toxic", "theme-ghost"];
+const themeNames = ["🩸 BLOOD", "🧟 TOXIC", "👻 GHOST"];
+let currentThemeIdx = 0;
+
+function applyTheme(idx) {
+    document.body.classList.remove(...themes);
+    document.body.classList.add(themes[idx]);
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.innerText = `🎨 THEME: ${themeNames[idx]}`;
+    localStorage.setItem('savedTheme', idx);
+}
+
+// Load saved theme
+let savedTheme = localStorage.getItem('savedTheme');
+if (savedTheme !== null) {
+    currentThemeIdx = parseInt(savedTheme);
+    applyTheme(currentThemeIdx);
+}
+
+bindClick('theme-btn', () => {
+    currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+    applyTheme(currentThemeIdx);
+});
+
+
+// ==========================================
+// 3. DICTIONARY (EASY 3-WORD CLUES)
 // ==========================================
 const wordsPool = {
     Short: [
@@ -68,7 +96,7 @@ const wordsPool = {
         { word: "ZOMBIE", clue: "Walk, Dead, Brains", clue2: "Infected, Bite." }, 
         { word: "POISON", clue: "Drink, Toxic, Sick", clue2: "Venom, Vial." },
         { word: "COFFIN", clue: "Box, Dead, Wood", clue2: "Vampire, Rest." }, 
-        { word: "MURDER", clue: "Kill, Crime, Police", clue2: "Weapon, Dead." }
+        { word: "MURDER", clue: "Kill, Crime, Knife", clue2: "Weapon, Dead." }
     ],
     Extreme: [
         { word: "CEMETERY", clue: "Graves, Dead, Yard", clue2: "Tombstones, Spooky." }, 
@@ -90,7 +118,7 @@ const levelsData = Array.from({length: 20}, (_, i) => {
 });
 
 // ==========================================
-// 3. AUDIO SYNTHESIZER
+// 4. AUDIO SYNTHESIZER
 // ==========================================
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
@@ -108,8 +136,7 @@ function playTone(freq, type, duration, vol=0.1, freqEnd = null) {
 
 const wrongSounds = [
     () => playTone(150, 'sine', 0.5, 0.4, 40), () => playTone(800, 'sawtooth', 0.3, 0.2, 1200),
-    () => { playTone(600, 'square', 0.4, 0.1); playTone(630, 'square', 0.4, 0.1); }, () => playTone(60, 'sawtooth', 0.6, 0.4),
-    () => playTone(300, 'triangle', 0.7, 0.3, 100), () => playTone(1200, 'square', 0.1, 0.2, 200)
+    () => { playTone(600, 'square', 0.4, 0.1); playTone(630, 'square', 0.4, 0.1); }, () => playTone(60, 'sawtooth', 0.6, 0.4)
 ];
 
 const sounds = {
@@ -128,7 +155,7 @@ const sounds = {
 };
 
 // ==========================================
-// 4. AUTH & MULTI-USER STORAGE
+// 5. AUTH & MULTI-USER STORAGE
 // ==========================================
 let authenticatedUser = localStorage.getItem('currentUser') || "";
 let totalPoints = 0; let completedLevels = []; let currentLevelIndex = 0; 
@@ -183,17 +210,8 @@ function logoutUser() { authenticatedUser = ""; localStorage.removeItem('current
 bindClick('logout-btn-landing', logoutUser);
 bindClick('logout-btn-map', logoutUser);
 
-// AUTO FULLSCREEN ON ENTRY
-bindClick('enter-game-btn', () => { 
-    initAudio(); 
-    goFullscreen(); 
-    renderLevelGrid(); 
-    showScreen('levelSelect'); 
-});
-bindClick('map-back-btn', () => showScreen('landing'));
-
 // ==========================================
-// 5. GAMEPLAY ENGINE & BUG FREE BUTTONS
+// 6. GAMEPLAY ENGINE & SAFE BUTTON LOGIC
 // ==========================================
 let currentWord = "", currentClue = "", currentClue2 = "", guessedLetters = new Set();
 let mistakes = 0, hintsUsed = 0, extraClueUsed = false;
@@ -202,31 +220,39 @@ let timeRemaining = 15, timerInterval = null, isLevelStarted = false;
 const timerSelect = document.getElementById('timer-select'); const timerDisplay = document.getElementById('timer-display');
 const wordDisplay = document.getElementById('word-display'); const keyboardDiv = document.getElementById('keyboard');
 const startExecutionBtn = document.getElementById('start-execution-btn'); const restartLevelBtn = document.getElementById('restart-level-btn');
-const backToLevelsBtn = document.getElementById('back-to-levels-btn'); 
+const backToLevelsBtn = document.getElementById('back-to-levels-btn');
 const hintBtn = document.getElementById('hint-btn'); const victimInput = document.getElementById('victim-name');
 const extraClueBtn = document.getElementById('extra-clue-btn'); 
 const extraClueContainer = document.getElementById('extra-clue-container'); const extraClueText = document.getElementById('extra-clue');
 
-// GLOBAL MODAL BUTTON BINDING
+bindClick('enter-game-btn', () => { 
+    initAudio(); 
+    goFullscreen(); 
+    renderLevelGrid(); 
+    showScreen('levelSelect'); 
+});
+
+bindClick('map-back-btn', () => showScreen('landing'));
+
+// GLOBAL MODALS EVENTS (Fixed all double clicks)
 bindClick('unlock-to-map-btn', () => { document.getElementById('unlock-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
 bindClick('lose-to-map-btn', () => { document.getElementById('lose-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
-bindClick('win-to-map-btn', () => { document.getElementById('win-modal').classList.remove('show'); renderLevelGrid(); showScreen('levelSelect'); });
 
 bindClick('retry-level-btn', () => { 
     document.getElementById('lose-modal').classList.remove('show'); 
     prepareLevel(currentLevelIndex); 
 });
 
+bindClick('next-level-btn', () => { 
+    document.getElementById('unlock-modal').classList.remove('show'); 
+    if (currentLevelIndex + 1 < levelsData.length) prepareLevel(currentLevelIndex + 1); 
+    else { renderLevelGrid(); showScreen('levelSelect'); } 
+});
+
 bindClick('win-next-btn', () => { 
     document.getElementById('win-modal').classList.remove('show'); 
     let nextLvl = levelsData[currentLevelIndex + 1]; 
     if (nextLvl && totalPoints >= nextLvl.unlockPts) prepareLevel(currentLevelIndex + 1); 
-    else { renderLevelGrid(); showScreen('levelSelect'); } 
-});
-
-bindClick('next-level-btn', () => { 
-    document.getElementById('unlock-modal').classList.remove('show'); 
-    if (currentLevelIndex + 1 < levelsData.length) prepareLevel(currentLevelIndex + 1); 
     else { renderLevelGrid(); showScreen('levelSelect'); } 
 });
 
@@ -266,8 +292,8 @@ function resetBoardState() {
     restartLevelBtn.classList.add('hidden-btn');
     backToLevelsBtn.classList.remove('hidden-btn'); 
 
-    hintBtn.innerText = "👁️ Reveal Letter (-2 Pts)"; hintBtn.classList.remove('disabled');
-    extraClueBtn.innerText = "📜 Extra Clue (-3 Pts)"; extraClueBtn.classList.remove('disabled');
+    hintBtn.innerText = "👁️ Reveal (-2 Pts)"; hintBtn.classList.remove('disabled');
+    extraClueBtn.innerText = "📜 Clue (-3 Pts)"; extraClueBtn.classList.remove('disabled');
     extraClueContainer.classList.add('hidden-btn');
 
     guessedLetters.clear(); mistakes = 0; document.getElementById('mistake-count').innerText = mistakes;
@@ -275,7 +301,7 @@ function resetBoardState() {
     
     timerDisplay.innerText = "00:15"; timerSelect.value = "15"; timerDisplay.classList.remove('panic');
     document.getElementById('current-clue').innerText = "Will reveal upon start...";
-    wordDisplay.innerHTML = `<div class="scary-placeholder">AWAITING EXECUTION...</div>`;
+    wordDisplay.innerHTML = `<div class="scary-placeholder">AWAITING...</div>`;
     
     buildKeyboard(true);
 }
@@ -298,7 +324,7 @@ function buildKeyboard(isDisabled) {
 
 timerSelect.addEventListener('change', () => { if (!isLevelStarted) timerDisplay.innerText = formatTime(parseInt(timerSelect.value)); });
 
-// START EXECUTION LOGIC
+// START EXECUTION LOGIC (NO BUG)
 bindClick('start-execution-btn', () => {
     initAudio();
     const vName = victimInput.value.trim();
@@ -321,7 +347,8 @@ bindClick('start-execution-btn', () => {
     }
 
     const randomWordObj = available[Math.floor(Math.random() * available.length)];
-    currentWord = randomWordObj.word.toUpperCase(); currentClue = randomWordObj.clue; currentClue2 = randomWordObj.clue2;
+    if (!randomWordObj) { currentWord = "DEATH"; currentClue = "End, Grave, Gone"; currentClue2 = "Final, Fatal."; }
+    else { currentWord = randomWordObj.word.toUpperCase(); currentClue = randomWordObj.clue; currentClue2 = randomWordObj.clue2; }
     
     globalUsedWords.push(currentWord); saveProgress(); 
 
@@ -330,7 +357,7 @@ bindClick('start-execution-btn', () => {
     
     startExecutionBtn.classList.add('hidden-btn'); 
     restartLevelBtn.classList.remove('hidden-btn');
-    backToLevelsBtn.classList.add('hidden-btn'); // NO ESCAPE
+    backToLevelsBtn.classList.add('hidden-btn'); // NO ESCAPE ONCE STARTED
 
     isLevelStarted = true; buildKeyboard(false); 
     
@@ -344,22 +371,20 @@ bindClick('start-execution-btn', () => {
     timerInterval = setInterval(updateTimer, 1000);
 });
 
-bindClick('restart-level-btn', () => prepareLevel(currentLevelIndex));
-
-// SHORTCUTS SYSTEM (CTRL)
+// CONTROL KEY SHORTCUT SYSTEM
 window.addEventListener('keydown', (e) => { 
     if (e.key === "Control" || e.ctrlKey) { document.getElementById('shortcuts-overlay').classList.remove('hidden'); }
     if (document.activeElement === victimInput && e.key !== "Enter") return;
 
     if (!isLevelStarted) {
         if (e.key === "Enter" && screens.game.classList.contains('active') && !startExecutionBtn.classList.contains('hidden-btn')) {
-            startExecutionBtn.click();
+            document.getElementById('start-execution-btn').click();
         }
         return;
     }
 
-    if (e.key === "1") hintBtn.click();
-    if (e.key === "2") extraClueBtn.click();
+    if (e.key === "1") document.getElementById('hint-btn').click();
+    if (e.key === "2") document.getElementById('extra-clue-btn').click();
     if (e.key === "0") document.getElementById('give-up-btn').click();
 
     const char = e.key.toUpperCase(); 
@@ -427,7 +452,7 @@ function handleLevelWin() {
 
 function triggerDeath() {
     isLevelStarted = false; clearInterval(timerInterval); timerDisplay.classList.remove('panic');
-    backToLevelsBtn.classList.remove('hidden-btn'); 
+    backToLevelsBtn.classList.remove('hidden-btn');
     sounds.extremeJumpscare(); 
     
     const jumpscare = document.getElementById('jumpscare'); jumpscare.classList.remove('hidden');
@@ -444,7 +469,7 @@ bindClick('hint-btn', () => {
     let unGuessed = currentWord.split('').filter(c => !guessedLetters.has(c));
     if (unGuessed.length > 0) { 
         totalPoints = Math.max(0, totalPoints - 2); saveProgress(); 
-        hintsUsed++; hintBtn.innerText = "👁️ Letter Revealed"; hintBtn.classList.add('disabled');
+        hintsUsed++; document.getElementById('hint-btn').innerText = "👁️ Letter Revealed"; document.getElementById('hint-btn').classList.add('disabled');
         handleGuess(unGuessed[0]); 
     }
 });
@@ -452,22 +477,46 @@ bindClick('hint-btn', () => {
 bindClick('extra-clue-btn', () => {
     if (!isLevelStarted) return; if (extraClueUsed) { showScaryToast("⚠️ EXTRA CLUE ALREADY USED!"); return; }
     totalPoints = Math.max(0, totalPoints - 3); saveProgress(); extraClueUsed = true;
-    extraClueBtn.innerText = "📜 Clue Used"; extraClueBtn.classList.add('disabled');
+    document.getElementById('extra-clue-btn').innerText = "📜 Clue Used"; document.getElementById('extra-clue-btn').classList.add('disabled');
     extraClueText.innerText = currentClue2; extraClueContainer.classList.remove('hidden-btn');
 });
 
 bindClick('give-up-btn', () => { if (isLevelStarted) triggerDeath(); });
 
 // ==========================================
-// 6. BACKGROUND PARTICLES 
+// 6. INTERACTIVE BACKGROUND PARTICLES (NEW!)
 // ==========================================
 const canvas = document.getElementById('particles'), ctx = canvas.getContext('2d');
+let mouseX = -1000, mouseY = -1000;
+window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+window.addEventListener('touchmove', (e) => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 window.addEventListener('resize', resize); resize();
-let parts = Array.from({ length: 80 }).map(() => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vy: Math.random() * -1 - 0.3, r: Math.random() * 2.5 + 1 }));
+
+let parts = Array.from({ length: 80 }).map(() => ({ 
+    x: Math.random() * canvas.width, 
+    y: Math.random() * canvas.height, 
+    vy: Math.random() * -1 - 0.3, 
+    r: Math.random() * 2.5 + 1 
+}));
+
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    parts.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255, 0, 0, 0.6)'; ctx.fill(); p.y += p.vy; if (p.y < 0) p.y = canvas.height; });
+    let particleColor = getComputedStyle(document.body).getPropertyValue('--particle-color') || 'rgba(255, 0, 0, 0.6)';
+    
+    parts.forEach(p => { 
+        // Interactive Mouse repulsion
+        let dx = mouseX - p.x; let dy = mouseY - p.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 80) { p.x -= dx * 0.05; p.y -= dy * 0.05; }
+        
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); 
+        ctx.fillStyle = particleColor; ctx.fill(); 
+        
+        p.y += p.vy; 
+        if (p.y < 0) { p.y = canvas.height; p.x = Math.random() * canvas.width; } 
+    });
     requestAnimationFrame(animate);
 }
 animate();
